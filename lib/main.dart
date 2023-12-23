@@ -1,3 +1,5 @@
+import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
+import 'package:chat_app_flutter/features/presentation/ui/splash/splash_screen.dart';
 import 'package:chat_app_flutter/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +17,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/home': (context) => const MainScreen(),
+      },
     );
   }
 }
