@@ -1,4 +1,8 @@
+import 'package:chat_app_flutter/features/presentation/providers/firebase/auth/auth_service.dart';
+import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
+import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -226,7 +230,7 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
     );
   }
 
-  _onPressed() {
+  _onPressed() async {
     setState(() {
       _showEmailSuffix = _emailController.text.isEmpty;
       _showPasswordSuffix = _passwordController.text.isEmpty;
@@ -243,28 +247,30 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
         password.isEmpty ||
         confirmPassword.isEmpty ||
         username.isEmpty) {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('the fields can\'t be empty'),
-        ),
-      );
+      MySnackBar.hideSnackBar(context);
+      MySnackBar.showSnackBar(context, 'Please fill all fields');
     } else if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password and confirm password is not match'),
-        ),
-      );
-    }
-    /* else { 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign up success'),
-        ),
-      );
+      MySnackBar.hideSnackBar(context);
+      MySnackBar.showSnackBar(context, 'Password not match');
+    } else {
+      MySnackBar.hideSnackBar(context);
+      MySnackBar.showSnackBar(context, 'Sign Up Successfully');
+      AuthService authService = AuthService();
+
+      try {
+        UserCredential userCredential =
+            await authService.signUpWithEmail(email, password);
+        // Navigate to home page
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+        }
+      }
+
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const Login()));
-    } */
+    }
   }
 }

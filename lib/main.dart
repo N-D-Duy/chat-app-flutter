@@ -1,4 +1,5 @@
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile/account_details.dart';
 import 'package:chat_app_flutter/features/presentation/ui/splash/splash_screen.dart';
 import 'package:chat_app_flutter/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,7 @@ class MainApp extends StatelessWidget {
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/home': (context) => const MainScreen(),
+        '/account-details': (context) => const AccountDetails(),
       },
     );
   }

@@ -58,6 +58,6 @@ class MyCirlceAvatar extends StatelessWidget {
           )
         ],
       ),
-    );
+    ); 
   }
 }
