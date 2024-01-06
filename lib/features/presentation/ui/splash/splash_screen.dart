@@ -1,142 +1,45 @@
-
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_state.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
-import 'package:chat_app_flutter/features/presentation/widgets/background.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
+import 'package:chat_app_flutter/features/presentation/ui/splash/splash_body.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Login()));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          const Background(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 296,
-                  height: 296,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Opacity(
-                          opacity: 0.70,
-                          child: Container(
-                            width: 296,
-                            height: 296,
-                            decoration: const ShapeDecoration(
-                              color: Colors.transparent,
-                              shape: OvalBorder(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 296,
-                          height: 296,
-                          decoration: const ShapeDecoration(
-                            color: Colors.transparent,
-                            shape: OvalBorder(
-                              side: BorderSide(
-                                  width: 1,
-                                  color: Color(0xFF11DCE8),
-                                  style: BorderStyle.solid),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 3.80,
-                        top: 4,
-                        child: Opacity(
-                          opacity: 0.30,
-                          child: Container(
-                            width: 288,
-                            height: 288,
-                            decoration: const ShapeDecoration(
-                              shape: OvalBorder(
-                                side: BorderSide(width: 1, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Positioned(
-                        left: 0,
-                        top: 0,
-                        child: SizedBox(
-                          width: 296,
-                          height: 296,
-                          child: CircularProgressIndicator(
-                            value: null,
-                            strokeWidth: 6.0,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                            backgroundColor: Colors.transparent,
-                            strokeCap: StrokeCap.round,
-                          ),
-                        ),
-                      ),
-                      const Positioned(
-                        left: 40.80,
-                        top: 110,
-                        child: SizedBox(
-                          width: 213.92,
-                          height: 76.06,
-                          child: Stack(children: [
-                            Text(
-                              "Flutter",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 247, 247, 247),
-                                fontSize: 64,
-                                fontFamily: "Roboto",
-                                fontWeight: FontWeight.w700,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Positioned(
-              bottom: 72,
-              right: 0,
-              left: 0,
-              child: Center(
-                child: Image.asset(
-                  'assets/images/flutter_logo.png',
-                  width: 111,
-                  height: 32,
-                ),
-              )),
-        ],
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoggedInState) {
+            Future.delayed(const Duration(milliseconds: 1000), () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const MainScreen()));
+            });
+          } else if (state is AuthLoggedOutState) {
+            Future.delayed(const Duration(milliseconds: 1000), () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Login()));
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoggedInState) {
+            Future.delayed(const Duration(milliseconds: 1000), () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const MainScreen()));
+            });
+          } else if (state is AuthLoggedOutState) {
+            Future.delayed(const Duration(milliseconds: 1000), () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Login()));
+            });
+          }
+          return const SplashBody();
+        },
       ),
     );
   }

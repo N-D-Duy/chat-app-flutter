@@ -1,9 +1,10 @@
-import 'package:chat_app_flutter/features/presentation/providers/firebase/auth/auth_service.dart';
+import 'package:chat_app_flutter/core/constants/routes.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_state.dart';
 import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
-import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SignUpBodySection extends StatefulWidget {
@@ -36,6 +37,8 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
   bool _showConfirmPasswordSuffix = false;
   bool _showUserNameSuffix = false;
   bool _signUpButtonPressed = false;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -146,6 +149,16 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
                       )
                     : null,
                 labelText: 'Password',
+                suffix: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    icon: _isPasswordVisible
+                        ? const Icon(Icons.visibility, color: Colors.white)
+                        : const Icon(Icons.visibility_off,
+                            color: Colors.white)),
                 labelStyle: const TextStyle(
                   color: Color(0xffa5a5a5),
                   fontSize: 16,
@@ -160,6 +173,7 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
+              obscureText: !_isPasswordVisible,
               onChanged: (value) {
                 setState(() {
                   _passwordController.text = value;
@@ -188,6 +202,16 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
                         ),
                       )
                     : null,
+                suffix: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                      });
+                    },
+                    icon: _isConfirmPasswordVisible
+                        ? const Icon(Icons.visibility, color: Colors.white)
+                        : const Icon(Icons.visibility_off,
+                            color: Colors.white)),
                 labelText: 'Confirm Password',
                 labelStyle: const TextStyle(
                   color: Color(0xffa5a5a5),
@@ -203,6 +227,7 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
+              obscureText: !_isConfirmPasswordVisible,
               onChanged: (value) {
                 setState(() {
                   _confirmPasswordController.text = value;
@@ -215,13 +240,28 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
               },
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: Button(
-                  key: const Key('button sign up'),
-                  text: 'Sign Up',
-                  onPressed: _onPressed),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSignUpSuccess) {
+                  Navigator.pushReplacementNamed(context, AppRoutes.login);
+                } else if (state is AuthErrorState) {
+                  MySnackBar.hideSnackBar(context);
+                  MySnackBar.showSnackBar(context, state.message);
+                }
+              },
+              builder: (context, state) {
+                if (state is AuthLoadingState) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: Button(
+                      key: const Key('button sign up'),
+                      text: 'Sign Up',
+                      onPressed: _onPressed),
+                );
+              },
             ),
             const Expanded(child: SizedBox(height: 16)),
           ],
@@ -253,24 +293,8 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
       MySnackBar.hideSnackBar(context);
       MySnackBar.showSnackBar(context, 'Password not match');
     } else {
-      MySnackBar.hideSnackBar(context);
-      MySnackBar.showSnackBar(context, 'Sign Up Successfully');
-      AuthService authService = AuthService();
-
-      try {
-        UserCredential userCredential =
-            await authService.signUpWithEmail(email, password);
-        // Navigate to home page
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
-      }
-
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Login()));
+      BlocProvider.of<AuthCubit>(context)
+          .signUpWithEmail(email, password, username);
     }
   }
 }

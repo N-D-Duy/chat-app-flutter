@@ -1,6 +1,4 @@
-
-
-import 'package:chat_app_flutter/features/presentation/providers/firebase/firebase_service.dart';
+import 'package:chat_app_flutter/features/data/datasources/remote/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -27,16 +25,43 @@ class AuthService {
   }
 
   Future<UserCredential> signUpWithEmail(String email, String password) async {
-  try {
-    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return userCredential;
-  } on FirebaseAuthException {
-    rethrow;
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException {
+      rethrow;
+    }
   }
-}
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isSignedIn() async {
+    final currentUser = _auth.currentUser;
+    return currentUser != null;
+  }
+
+  Future<User?> getCurrentUser() async {
+    final currentUser = _auth.currentUser;
+    return currentUser;
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   /* Future<UserCredential> signInWithGoogle() async {
     try {

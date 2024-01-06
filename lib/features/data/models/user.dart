@@ -1,50 +1,43 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:chat_app_flutter/features/data/models/account.dart';
-import 'package:chat_app_flutter/features/data/models/profile.dart';
+import 'package:flutter/foundation.dart';
 
 class User {
-  String id;
+  String uid;
   String userName;
-  Account account;
-  Profile? profile;
+  List<String> chats;
   User({
-    required this.id,
+    required this.uid,
     required this.userName,
-    required this.account,
-    this.profile,
+    required this.chats,
   });
 
   User copyWith({
-    String? id,
+    String? uid,
     String? userName,
-    Account? account,
-    Profile? profile,
+    List<String>? chats,
   }) {
     return User(
-      id: id ?? this.id,
+      uid: uid ?? this.uid,
       userName: userName ?? this.userName,
-      account: account ?? this.account,
-      profile: profile ?? this.profile,
+      chats: chats ?? this.chats,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      'uid': uid,
       'userName': userName,
-      'account': account.toMap(),
-      'profile': profile?.toMap(),
+      'chats': chats,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] as String,
+      uid: map['uid'] as String,
       userName: map['userName'] as String,
-      account: Account.fromMap(map['account'] as Map<String,dynamic>),
-      profile: map['profile'] != null ? Profile.fromMap(map['profile'] as Map<String,dynamic>) : null,
+      chats: List<String>.from((map['chats'] as List<String>)),
     );
   }
 
@@ -54,26 +47,18 @@ class User {
       User.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() {
-    return 'User(id: $id, userName: $userName, account: $account, profile: $profile)';
-  }
+  String toString() => 'User(uid: $uid, userName: $userName, chats: $chats)';
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
   
     return 
-      other.id == id &&
+      other.uid == uid &&
       other.userName == userName &&
-      other.account == account &&
-      other.profile == profile;
+      listEquals(other.chats, chats);
   }
 
   @override
-  int get hashCode {
-    return id.hashCode ^
-      userName.hashCode ^
-      account.hashCode ^
-      profile.hashCode;
-  }
+  int get hashCode => uid.hashCode ^ userName.hashCode ^ chats.hashCode;
 }

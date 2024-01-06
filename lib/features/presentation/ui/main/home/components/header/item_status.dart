@@ -13,7 +13,9 @@ class ItemStatus extends StatelessWidget {
       height: 60,
       child: MyCirlceAvatar(
           name: profile.userName,
-          image: profile.avatar,
+          image: (profile.avatar == null)
+              ? 'assets/images/default_avatar.jpg'
+              : profile.avatar!,
           isSpecialBorder: true),
     );
   }

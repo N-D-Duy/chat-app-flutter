@@ -1,5 +1,8 @@
+import 'package:chat_app_flutter/core/constants/routes.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePages extends StatefulWidget {
   const ProfilePages({super.key});
@@ -105,11 +108,9 @@ class _ProfilePagesState extends State<ProfilePages> {
                           TextButton(
                             onPressed: () {
                               // Đóng hộp thoại và thực hiện xử lý khi ấn nút "Yes"
-                              Navigator.of(context).pop();
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                              BlocProvider.of<AuthCubit>(context).signOut();
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoutes.splash);
                               // Thực hiện log out ở đây
                               // ...
                             },

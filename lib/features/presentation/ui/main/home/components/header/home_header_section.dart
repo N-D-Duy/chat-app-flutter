@@ -1,6 +1,4 @@
-import 'package:chat_app_flutter/features/data/models/account.dart';
-import 'package:chat_app_flutter/features/data/models/profile.dart';
-import 'package:chat_app_flutter/features/data/models/user.dart';
+/* import 'package:chat_app_flutter/features/data/models/user.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatefulWidget {
@@ -11,71 +9,7 @@ class HomeHeader extends StatefulWidget {
 }
 
 class _HomeHeaderState extends State<HomeHeader> {
-  List<User> users = [
-    User(
-        userName: 'My Status',
-        account: Account(email: 'nguyenducduy@1', password: '123321'),
-        id: '001',
-        profile: Profile(
-            avatar: 'assets/images/avatar_banana.jpg', userName: 'Duy Nguyen')),
-    User(
-        userName: 'User1',
-        account: Account(email: 'user1@gmail.com', password: '123321'),
-        id: '002',
-        profile: Profile(
-            avatar: 'assets/images/avatar_banana.jpg', userName: 'User1')),
-    User(
-        userName: 'User2',
-        account: Account(email: 'user2@gmail.com', password: '123321'),
-        id: '002',
-        profile: Profile(
-            avatar: 'assets/images/avatar_banana.jpg', userName: 'User2')),
-    User(
-      userName: 'User3',
-      account: Account(email: 'user3@gmail.com', password: '123321'),
-      id: '003',
-      profile: Profile(
-        avatar: 'assets/images/avatar_banana.jpg',
-        userName: 'User3',
-      ),
-    ),
-    User(
-      userName: 'User4',
-      account: Account(email: 'user4@gmail.com', password: '123321'),
-      id: '004',
-      profile: Profile(
-        avatar: 'assets/images/avatar_banana.jpg',
-        userName: 'User4',
-      ),
-    ),
-    User(
-      userName: 'User5',
-      account: Account(email: 'user5@gmail.com', password: '123321'),
-      id: '005',
-      profile: Profile(
-        avatar: 'assets/images/avatar_banana.jpg',
-        userName: 'User5',
-      ),
-    ),
-    User(
-      userName: 'User6',
-      account: Account(email: 'user6@gmail.com', password: '123321'),
-      id: '006',
-      profile: Profile(
-        avatar: 'assets/images/avatar_banana.jpg',
-        userName: 'User6',
-      ),
-    ),
-    User(
-      userName: 'User7',
-      account: Account(email: 'user7@gmail.com', password: '123321'),
-      id: '007',
-      profile: Profile(
-        avatar: 'assets/images/avatar_banana.jpg',
-        userName: 'User7',
-      ),
-    ),
-  ];
+  List<User> users = [User(userName: 'My Status', uid: '001', chats: [])];
 
   @override
   Widget build(BuildContext context) {
@@ -194,3 +128,4 @@ class _HomeHeaderState extends State<HomeHeader> {
         ]));
   }
 }
+ */

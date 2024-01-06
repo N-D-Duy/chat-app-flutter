@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_state.dart';
 import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/icon_login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SignInBodySection extends StatefulWidget {
@@ -25,6 +28,7 @@ class _SignInBodySectionState extends State<SignInBodySection> {
   bool _showEmailSuffix = false;
   bool _showPasswordSuffix = false;
   bool _signInButtonPressed = false;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +50,35 @@ class _SignInBodySectionState extends State<SignInBodySection> {
             Expanded(child: const SizedBox(height: 16)),
             _forgotPassword(), //forgot password
             Expanded(child: const SizedBox(height: 16)),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: Button(
-                  key: Key('button sign in'),
-                  text: 'Sign In',
-                  onPressed: _onPressed),
-            ),
+            BlocConsumer<AuthCubit, AuthState>(builder: (context, state) {
+              if (state is AuthLoadingState) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: Button(
+                    key: Key('button sign in'),
+                    text: 'Sign In',
+                    onPressed: () => _onPressed()),
+              );
+            }, listener: (context, state) {
+              if (state is AuthSignInSuccess) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                });
+              }
+              if (state is AuthErrorState) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                  ),
+                );
+              }
+            }),
             const SizedBox(height: 16),
             Row(
               children: [
@@ -159,6 +184,17 @@ class _SignInBodySectionState extends State<SignInBodySection> {
                     ),
                   )
                 : null,
+            suffix: IconButton(
+              icon: Icon(
+                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Color(0xffa5a5a5),
+              ),
+              onPressed: () {
+                setState(() {
+                  _isPasswordVisible = !_isPasswordVisible;
+                });
+              },
+            ),
             labelText: 'Password',
             labelStyle: TextStyle(
               color: Color(0xffa5a5a5),
@@ -174,6 +210,7 @@ class _SignInBodySectionState extends State<SignInBodySection> {
               borderRadius: BorderRadius.circular(15.0),
             ),
           ),
+          obscureText: !_isPasswordVisible,
           onChanged: (value) {
             setState(() {
               _passwordController.text = value;
@@ -216,9 +253,7 @@ class _SignInBodySectionState extends State<SignInBodySection> {
     var email = emailController.text;
     var password = passwordController.text;
 
-    if (email == 'admin' && password == 'admin') {
-      Navigator.pushNamed(context, '/home');
-    } else if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -226,12 +261,7 @@ class _SignInBodySectionState extends State<SignInBodySection> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Email or password is incorrect'),
-        ),
-      );
+      BlocProvider.of<AuthCubit>(context).signInWithEmail(email, password);
     }
   }
 
