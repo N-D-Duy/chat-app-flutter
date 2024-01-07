@@ -15,49 +15,49 @@ class MyCirlceAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 30,
-      height: 30,
-      child: Stack(
+      width: 100,
+      height: 100,
+      child: Column(
         children: [
-          isSpecialBorder
-              ? SvgPicture.asset(
-                  'assets/images/profile_border_1.svg',
-                  width: 26,
-                  height: 26,
-                )
-              : SvgPicture.asset(
-                  'assets/images/profile_border_2.svg',
-                  width: 26,
-                  height: 26,
+          Stack(
+            children: [
+              isSpecialBorder
+                  ? SvgPicture.asset(
+                      'assets/vectors/profile_border_1.svg',
+                      width: 60,
+                      height: 60,
+                    )
+                  : SvgPicture.asset(
+                      'assets/vectors/profile_border_2.svg',
+                      width: 60,
+                      height: 60,
+                    ),
+              Positioned(
+                top: 4,
+                left: 2,
+                right: 2,
+                child: CircleAvatar(
+                  radius: 26,
+                  backgroundImage: AssetImage(image),
                 ),
-          Positioned(
-            top: 2,
-            left: 2,
-            right: 2,
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(image),
-            ),
+              ),
+            ],
           ),
           Container(
             height: 8,
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Text(
-              name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+          Text(
+            name,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis, 
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
-          )
+          ),
         ],
       ),
-    ); 
+    );
   }
 }

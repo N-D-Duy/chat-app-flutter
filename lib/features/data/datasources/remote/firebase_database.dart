@@ -16,6 +16,7 @@ abstract class Firebase {
   Future<Resource<void>> updateProfile(Profile newProfile, String uid);
   Future<Resource<Profile>> getProfile(String uid);
   Future<Resource<void>> insertProfile(Profile profile, String uid);
+  Future<Resource<List<Map<String, dynamic>>>> getProfiles();
 
 
   //account

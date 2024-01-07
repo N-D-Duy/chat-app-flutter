@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:chat_app_flutter/core/constants/app_color.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/components/sign_in_body_section.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/components/sign_up_body_section.dart';
-import 'package:chat_app_flutter/features/presentation/widgets/background.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -22,7 +22,11 @@ class _LoginState extends State<Login> {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(children: [
-          Background(),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            color: AppColor.backgroundLoginColor,
+          ),
           Positioned(top: 0, left: 0, right: 0, child: HeaderSection()),
           Positioned(
               top: 250,

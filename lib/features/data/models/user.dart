@@ -37,7 +37,8 @@ class User {
     return User(
       uid: map['uid'] as String,
       userName: map['userName'] as String,
-      chats: List<String>.from((map['chats'] as List<String>)),
+      chats: (map['chats'] as List<dynamic>?)?.cast<String>() ??
+          [], // Kiểm tra và chuyển đổi
     );
   }
 
@@ -52,11 +53,10 @@ class User {
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.uid == uid &&
-      other.userName == userName &&
-      listEquals(other.chats, chats);
+
+    return other.uid == uid &&
+        other.userName == userName &&
+        listEquals(other.chats, chats);
   }
 
   @override

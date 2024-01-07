@@ -13,28 +13,19 @@ class AuthService {
   final FacebookLogin _facebookLogin = FacebookLogin(); */
 
   Future<UserCredential> signInWithEmail(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential;
-    } on FirebaseAuthException {
-      rethrow;
-    }
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential;
   }
 
   Future<UserCredential> signUpWithEmail(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential;
-    } on FirebaseAuthException {
-      rethrow;
-    }
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential;
   }
 
   Future<void> signOut() async {

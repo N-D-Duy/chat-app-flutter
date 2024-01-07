@@ -10,6 +10,10 @@ class Account {
     required this.email,
     required this.password,
   });
+  Account.defaultConstructorMethod()
+      : uid = '',
+        email = '',
+        password = '';
 
   Account copyWith({
     String? uid,
@@ -59,4 +63,6 @@ class Account {
 
   @override
   int get hashCode => uid.hashCode ^ email.hashCode ^ password.hashCode;
+
+  static defaultConstructor() {}
 }

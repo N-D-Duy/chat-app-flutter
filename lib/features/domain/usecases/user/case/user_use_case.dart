@@ -63,6 +63,10 @@ class UserUseCase {
     }
   }
 
+  Future<Resource<List<Map<String, dynamic>>>> getProfiles() async {
+    return _repository.getProfiles();
+  }
+
   Future<Resource<void>> insertProfile(Profile profile, String uid) async {
     if (uid.isEmpty) {
       throw MyException('InsertProfile: uid is empty');

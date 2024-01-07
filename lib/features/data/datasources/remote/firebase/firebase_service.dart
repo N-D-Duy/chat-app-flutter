@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
-  // Private constructor for FirebaseAuth
   FirebaseService._();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static FirebaseAuth get auth => _auth;

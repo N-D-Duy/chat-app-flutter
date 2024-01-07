@@ -1,5 +1,3 @@
-
-
 import 'package:chat_app_flutter/features/data/models/account.dart';
 import 'package:chat_app_flutter/features/data/models/chat.dart';
 import 'package:chat_app_flutter/features/data/models/profile.dart';
@@ -18,7 +16,7 @@ abstract class Repository {
   Future<Resource<void>> updateProfile(Profile newProfile, String uid);
   Future<Resource<Profile>> getProfile(String uid);
   Future<Resource<void>> insertProfile(Profile profile, String uid);
-
+  Future<Resource<List<Map<String, dynamic>>>> getProfiles();
 
   //account
   Future<Resource<void>> updateAccount(Account newAccount, String uid);
@@ -30,7 +28,8 @@ abstract class Repository {
   Future<Resource<void>> deleteChat(String uid, String chatId);
   Future<Resource<List<Map<String, dynamic>>>> getChats(String uid);
   Future<Resource<List<Map<String, dynamic>>>> getChatMessages(String chatId);
-  Future<Resource<void>> insertChatMessage(String chatId, Map<String, dynamic> message);
+  Future<Resource<void>> insertChatMessage(
+      String chatId, Map<String, dynamic> message);
   Future<Resource<void>> deleteChatMessage(String chatId, String messageId);
 
   //auth
@@ -39,5 +38,4 @@ abstract class Repository {
   Future<void> signOut();
   Future<bool> isSignedIn();
   Future<User?> getCurrentUser();
-
 }

@@ -278,10 +278,10 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
       _showConfirmPasswordSuffix = _confirmPasswordController.text.isEmpty;
       _signUpButtonPressed = true;
     });
-    var email = emailController.text;
-    var password = passwordController.text;
-    var confirmPassword = confirmPasswordController.text;
-    var username = userNameController.text;
+    var email = emailController.text.trim();
+    var password = passwordController.text.trim();
+    var confirmPassword = confirmPasswordController.text.trim();
+    var username = userNameController.text.trim();
 
     if (email.isEmpty ||
         password.isEmpty ||

@@ -1,18 +1,27 @@
-/* import 'package:chat_app_flutter/features/data/models/user.dart';
+import 'package:chat_app_flutter/features/data/models/profile.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/user_cubits/user_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/cubits/user_cubits/user_state.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_screen.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/home/components/header/item_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeHeader extends StatefulWidget {
-  const HomeHeader({super.key});
+  final String uid;
+  const HomeHeader({super.key, required this.uid});
 
   @override
   State<HomeHeader> createState() => _HomeHeaderState();
 }
 
 class _HomeHeaderState extends State<HomeHeader> {
-  List<User> users = [User(userName: 'My Status', uid: '001', chats: [])];
-
+  String get uid => widget.uid;
   @override
   Widget build(BuildContext context) {
+    if (uid.isNotEmpty) {
+      BlocProvider.of<UserCubit>(context).getUsers();
+      BlocProvider.of<UserCubit>(context).getProfiles();
+    }
     return SizedBox(
         height: 200,
         child: Stack(children: [
@@ -21,27 +30,54 @@ class _HomeHeaderState extends State<HomeHeader> {
               color: Colors.transparent,
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.search, color: Colors.white, size: 30),
-                  Text(
+                  const Icon(Icons.search, color: Colors.white, size: 30),
+                  const Text(
                     'Home',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.w500),
                   ),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                        'https://avatars.githubusercontent.com/u/54418563?v=4'),
+                  BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      if (state is ProfileLoadingState ||
+                          state is ProfileErrorState) {
+                        return const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                        );
+                      } else if (state is ProfileLoadedState) {
+                        Profile profile = state.profile.firstWhere(
+                            (element) => element.uid == uid,
+                            orElse: () => Profile.defaultConstructor());
+                        if (profile.avatar != null) {
+                          return CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage(profile.avatar!),
+                          );
+                        } else {
+                          return const CircleAvatar(
+                            radius: 20,
+                            backgroundImage:
+                                AssetImage('assets/images/default_avatar.jpg'),
+                          );
+                        }
+                      } else {
+                        return const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                        );
+                      }
+                    },
                   )
                 ],
               ),
@@ -49,83 +85,65 @@ class _HomeHeaderState extends State<HomeHeader> {
           ),
           Positioned(
             bottom: 30,
-            left: 10,
+            left: 20,
             right: 0,
+            top: 80,
             child: SizedBox(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(
-                      users.length,
-                      (index) => Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: index == 0
-                                ? Column(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          SizedBox(
-                                            width: 60,
-                                            height: 60,
-                                            child: CircleAvatar(
-                                              radius: 30,
-                                              backgroundImage: AssetImage(
-                                                  users[index].profile!.avatar),
-                                            ),
-                                          ),
-                                          const Positioned(
-                                            bottom: 0,
-                                            right: 0,
-                                            child: CircleAvatar(
-                                              radius: 10,
-                                              backgroundColor: Colors.green,
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        users[index].profile!.userName,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      )
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 60,
-                                        height: 60,
-                                        child: CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: AssetImage(
-                                              users[index].profile!.avatar),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        users[index].profile!.userName,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                          )),
-                ),
+              height: 100,
+              child: BlocBuilder<UserCubit, UserState>(
+                builder: (context, state) {
+                  if (state is ProfileLoadingState) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is ProfileLoadedState) {
+                    List<Profile> profiles = state.profile;
+
+                    // Get the profile of the current user
+                    //and put it at the first index
+                    List<Profile> specificProfile = [];
+                    List<Profile> remainingProfiles = [];
+
+                    for (var profile in profiles) {
+                      if (profile.uid == uid) {
+                        specificProfile.add(profile);
+                      } else {
+                        remainingProfiles.add(profile);
+                      }
+                    }
+
+                    // Concatenate the two lists
+                    List<Profile> reorderedProfiles =
+                        specificProfile + remainingProfiles;
+
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: reorderedProfiles.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (index != 0) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                            profile: reorderedProfiles[index],
+                                            uid: uid,
+                                          )));
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child:
+                                ItemStatus(profile: reorderedProfiles[index]),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
             ),
-          )
+          ),
         ]));
   }
 }
- */

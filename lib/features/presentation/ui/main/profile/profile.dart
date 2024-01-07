@@ -1,6 +1,5 @@
 import 'package:chat_app_flutter/core/constants/routes.dart';
 import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

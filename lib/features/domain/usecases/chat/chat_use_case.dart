@@ -16,7 +16,7 @@ class ChatUseCase {
     }
   }
 
-  Future<Resource<void>> getChatsByUid(String uid) async {
+  Future<Resource<List<Map<String, dynamic>>>> getChatsByUid(String uid) async {
     if (uid.isEmpty) {
       throw Exception('GetAllChatsUseCase: uid is empty');
     } else {
@@ -24,7 +24,8 @@ class ChatUseCase {
     }
   }
 
-  Future<Resource<void>> getChatMessages(String chatId) async {
+  Future<Resource<List<Map<String, dynamic>>>> getChatMessages(
+      String chatId) async {
     if (chatId.isEmpty) {
       throw MyException('GetChatMessages: chatId is empty');
     }
@@ -52,7 +53,4 @@ class ChatUseCase {
     }
     return _repository.deleteChatMessage(chatId, messageId);
   }
-
-
-  
 }

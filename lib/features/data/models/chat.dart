@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-
 class Chat {
   String chatId;
   final String currentUserId;
@@ -52,12 +51,15 @@ class Chat {
 
   factory Chat.fromMap(Map<String, dynamic> map) {
     return Chat(
-      chatId: map['chatId'] as String,
-      currentUserId: map['currentUserId'] as String,
-      otherUserId: map['otherUserId'] as String,
-      messages: List<String>.from((map['messageId'] as List<String>)),
-      time: map['time'] as String,
-      unreadMessage: map['unreadMessage'] as int,
+      chatId: map['chatId'] as String? ?? '',
+      currentUserId: map['currentUserId'] as String? ?? '',
+      otherUserId: map['otherUserId'] as String? ?? '',
+      messages: (map['messageId'] as List<dynamic>?)
+              ?.map((message) => message.toString())
+              .toList() ??
+          [],
+      time: map['time'] as String? ?? '',
+      unreadMessage: map['unreadMessage'] as int? ?? 0,
     );
   }
 
@@ -74,23 +76,22 @@ class Chat {
   @override
   bool operator ==(covariant Chat other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.chatId == chatId &&
-      other.currentUserId == currentUserId &&
-      other.otherUserId == otherUserId &&
-      listEquals(other.messages, messages) &&
-      other.time == time &&
-      other.unreadMessage == unreadMessage;
+
+    return other.chatId == chatId &&
+        other.currentUserId == currentUserId &&
+        other.otherUserId == otherUserId &&
+        listEquals(other.messages, messages) &&
+        other.time == time &&
+        other.unreadMessage == unreadMessage;
   }
 
   @override
   int get hashCode {
     return chatId.hashCode ^
-      currentUserId.hashCode ^
-      otherUserId.hashCode ^
-      messages.hashCode ^
-      time.hashCode ^
-      unreadMessage.hashCode;
+        currentUserId.hashCode ^
+        otherUserId.hashCode ^
+        messages.hashCode ^
+        time.hashCode ^
+        unreadMessage.hashCode;
   }
 }

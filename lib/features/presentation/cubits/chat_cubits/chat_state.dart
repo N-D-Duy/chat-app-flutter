@@ -2,9 +2,9 @@ abstract class ChatState{}
 
 class ChatInitialState extends ChatState{}
 class ChatLoadingState extends ChatState{}
-class ChatLoadedState extends ChatState{
-  final List<Map<String, dynamic>> chats;
-  ChatLoadedState({required this.chats});
+class ChatLoadedState<T> extends ChatState{
+  final T data;
+  ChatLoadedState({required this.data});
 }
 class ChatErrorState extends ChatState{
   final String message;

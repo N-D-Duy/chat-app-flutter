@@ -15,9 +15,18 @@ class Profile {
     this.phone,
     this.address,
     this.birthday,
-    required this.avatar,
+    this.avatar,
     this.gender,
   });
+
+  Profile.defaultConstructor()
+      : uid = '',
+        userName = '',
+        phone = null,
+        address = null,
+        birthday = null,
+        avatar = null,
+        gender = null;
 
   Profile copyWith({
     String? uid,
@@ -76,25 +85,24 @@ class Profile {
   @override
   bool operator ==(covariant Profile other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.uid == uid &&
-      other.userName == userName &&
-      other.phone == phone &&
-      other.address == address &&
-      other.birthday == birthday &&
-      other.avatar == avatar &&
-      other.gender == gender;
+
+    return other.uid == uid &&
+        other.userName == userName &&
+        other.phone == phone &&
+        other.address == address &&
+        other.birthday == birthday &&
+        other.avatar == avatar &&
+        other.gender == gender;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
-      userName.hashCode ^
-      phone.hashCode ^
-      address.hashCode ^
-      birthday.hashCode ^
-      avatar.hashCode ^
-      gender.hashCode;
+        userName.hashCode ^
+        phone.hashCode ^
+        address.hashCode ^
+        birthday.hashCode ^
+        avatar.hashCode ^
+        gender.hashCode;
   }
 }

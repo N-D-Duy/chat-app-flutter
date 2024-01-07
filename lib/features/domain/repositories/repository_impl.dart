@@ -122,4 +122,9 @@ class RepositoryImpl extends Repository {
       String chatId, Map<String, dynamic> message) async {
     return await FirebaseImpl().insertChatMessage(chatId, message);
   }
+  
+  @override
+  Future<Resource<List<Map<String, dynamic>>>> getProfiles() async {
+    return await FirebaseImpl().getProfiles();
+  }
 }

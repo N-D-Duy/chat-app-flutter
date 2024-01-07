@@ -25,7 +25,7 @@ class FirebaseImpl extends Firebase {
           .then((snapshot) => snapshot.data()?['chatId']);
       await _databaseReference.child('chats').child(chatId).remove();
       return Resource(Status.SUCCESS, null, 'Chat deleted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -35,7 +35,7 @@ class FirebaseImpl extends Firebase {
     try {
       await _firestore.collection('users').doc(uid).delete();
       return Resource(Status.SUCCESS, null, 'User deleted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -58,7 +58,7 @@ class FirebaseImpl extends Firebase {
         chats.add(chat);
       }
       return Resource(Status.SUCCESS, chats, 'Chats retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -72,7 +72,7 @@ class FirebaseImpl extends Firebase {
           .get()
           .then((snapshot) => User.fromMap(snapshot.data()!));
       return Resource(Status.SUCCESS, user, 'User retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -88,7 +88,7 @@ class FirebaseImpl extends Firebase {
         users.add(User.fromMap(snapshot.data()));
       }
       return Resource(Status.SUCCESS, users, 'Users retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -116,7 +116,7 @@ class FirebaseImpl extends Firebase {
         'chats': FieldValue.arrayUnion([chatRef.key])
       });
       return Resource(Status.SUCCESS, null, 'Chat inserted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -129,7 +129,7 @@ class FirebaseImpl extends Firebase {
           .doc(user.uid)
           .set(user.toMap());
       return Resource(Status.SUCCESS, null, 'User inserted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -142,7 +142,7 @@ class FirebaseImpl extends Firebase {
           .doc(user.uid)
           .update(user.toMap());
       return Resource(Status.SUCCESS, null, 'User updated successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -155,7 +155,7 @@ class FirebaseImpl extends Firebase {
           .doc(uid)
           .update(newAccount.toMap());
       return Resource(Status.SUCCESS, null, 'Account updated successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -168,7 +168,7 @@ class FirebaseImpl extends Firebase {
           .doc(uid)
           .update(newProfile.toMap());
       return Resource(Status.SUCCESS, null, 'Profile updated successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -183,7 +183,7 @@ class FirebaseImpl extends Firebase {
           .then((snapshot) => Account.fromMap(snapshot.data()!));
       return Resource(
           Status.SUCCESS, account, 'Account retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -198,7 +198,7 @@ class FirebaseImpl extends Firebase {
           .then((snapshot) => Profile.fromMap(snapshot.data()!));
       return Resource(
           Status.SUCCESS, profile, 'Profile retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -211,7 +211,7 @@ class FirebaseImpl extends Firebase {
           .doc(uid)
           .set(account.toMap());
       return Resource(Status.SUCCESS, null, 'Account inserted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -224,7 +224,7 @@ class FirebaseImpl extends Firebase {
           .doc(uid)
           .set(profile.toMap());
       return Resource(Status.SUCCESS, null, 'Profile inserted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -245,7 +245,7 @@ class FirebaseImpl extends Firebase {
           .remove();
       return Resource(
           Status.SUCCESS, null, 'Chat message deleted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -267,7 +267,7 @@ class FirebaseImpl extends Firebase {
       }
       return Resource(
           Status.SUCCESS, messages, 'Chat messages retrieved successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }
@@ -296,7 +296,24 @@ class FirebaseImpl extends Firebase {
           .set(message);
       return Resource(
           Status.SUCCESS, null, 'Chat message inserted successfully');
-    } catch (e) {
+    } on FirebaseException catch (e) {
+      return Resource(Status.ERROR, null, e.toString());
+    }
+  }
+
+  @override
+  Future<Resource<List<Map<String, dynamic>>>> getProfiles() async {
+    try {
+      List<Map<String, dynamic>> profiles = [];
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _firestore.collection('profiles').get();
+      for (QueryDocumentSnapshot<Map<String, dynamic>> snapshot
+          in querySnapshot.docs) {
+        profiles.add(snapshot.data());
+      }
+      return Resource(
+          Status.SUCCESS, profiles, 'Profiles retrieved successfully');
+    } on FirebaseException catch (e) {
       return Resource(Status.ERROR, null, e.toString());
     }
   }

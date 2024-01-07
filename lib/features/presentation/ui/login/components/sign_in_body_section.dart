@@ -250,8 +250,8 @@ class _SignInBodySectionState extends State<SignInBodySection> {
       _showPasswordSuffix = _passwordController.text.isEmpty;
       _signInButtonPressed = true;
     });
-    var email = emailController.text;
-    var password = passwordController.text;
+    var email = emailController.text.trim();
+    var password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
