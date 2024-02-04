@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/cubits/auth_cubits/auth_state.dart';
+import 'package:chat_app_flutter/core/utils/routes/Approutes.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_state.dart';
 import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/icon_login.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,7 @@ class _SignInBodySectionState extends State<SignInBodySection> {
             }, listener: (context, state) {
               if (state is AuthSignInSuccess) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  Navigator.pushReplacementNamed(context, MainScreen.routeName);
                 });
               }
               if (state is AuthErrorState) {

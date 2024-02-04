@@ -1,16 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:chat_app_flutter/features/data/models/message.dart';
-import 'package:chat_app_flutter/features/data/models/profile.dart';
-import 'package:chat_app_flutter/features/presentation/cubits/chat_cubits/chat_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/cubits/chat_cubits/chat_state.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/message_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chat_app_flutter/features/data/models/profile_model.dart';
 
 class ChatScreen extends StatefulWidget {
+  static const String routeName = 'chat';
   final Profile profile;
-  final String uid;
-  const ChatScreen({Key? key, required this.profile, required this.uid}) : super(key: key);
+  final String receiverId;
+  final bool isGroupChat;
+  const ChatScreen({
+    Key? key,
+    required this.profile,
+    required this.receiverId,
+    required this.isGroupChat,
+  }) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -18,9 +20,10 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   String get senderId => widget.profile.uid;
-  String get uid => widget.uid;
+  String get receiverId => widget.receiverId;
   String get name => widget.profile.userName;
   String? get avatar => widget.profile.avatar;
+  bool chatCreated = false;
 
   List<List<Color>> colors = [
     [const Color(0xFF4158D0), const Color(0xFFC850C0), const Color(0xFFFFCC70)],
@@ -33,34 +36,14 @@ class _ChatScreenState extends State<ChatScreen> {
   final FocusNode _inputFocus = FocusNode();
   final TextEditingController _inputController = TextEditingController();
   bool _isTexting = false;
-
+  String chatId = '';
   @override
   Widget build(BuildContext context) {
-    String chatId = senderId.compareTo(uid) < 0 ? senderId + uid : uid + senderId;
-    BlocProvider.of<ChatCubit>(context).getChatMessages(chatId);
-    return Scaffold(
-      appBar: _appBarSection(context),
-      body: Stack(children: [
-        Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: currentBackgroundColor.isEmpty
-                        ? colors[0]
-                        : currentBackgroundColor))),
-        BlocBuilder<ChatCubit, ChatState>(
-          builder: (context, state) {
-            if (state is ChatLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ChatLoadedState) {
-              List<Message> messages = state.data;
-              return MessageItem(messages: messages, uid: senderId);
-            }
-            return const Center(child: Text('Error'));
-          },
-        ),
-        _inputSection()
-      ]),
-    );
+    chatId = senderId.compareTo(receiverId) < 0
+        ? senderId + receiverId
+        : receiverId + senderId;
+
+    return Placeholder();
   }
 
   PreferredSize _appBarSection(BuildContext context) {
@@ -190,31 +173,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-            Container(
-              child: _isTexting
-                  ? IconButton(
-                      onPressed: () {
-                        //not available yet
-                      },
-                      icon:
-                          const Icon(Icons.send_outlined, color: Colors.black))
-                  : Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              //not available yet
-                            },
-                            icon: const Icon(Icons.camera_alt_outlined,
-                                color: Colors.black)),
-                        IconButton(
-                            onPressed: () {
-                              //not available yet
-                            },
-                            icon: const Icon(Icons.mic_outlined,
-                                color: Colors.black)),
-                      ],
-                    ),
-            )
           ],
         ),
       ),

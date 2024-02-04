@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:chat_app_flutter/core/constants/app_color.dart';
+import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/components/sign_in_body_section.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/components/sign_up_body_section.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
+  static const String routeName = 'login';
   const Login({super.key});
 
   @override
