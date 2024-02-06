@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app_flutter/core/utils/error/exception/failure.dart';
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
-import 'package:chat_app_flutter/features/data/models/status_model.dart';
+import 'package:chat_app_flutter/features/domain/models/status_model.dart';
 import 'package:chat_app_flutter/features/data/repositories/status_repository.dart';
 // ignore: implementation_imports
 import 'package:either_dart/src/either.dart';

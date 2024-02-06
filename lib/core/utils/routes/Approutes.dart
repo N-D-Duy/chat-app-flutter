@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_screen.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/splash/splash_page.dart';
@@ -17,10 +17,10 @@ class AppRoutes {
       case MainScreen.routeName:
         return MaterialPageRoute(builder: (context) => const MainScreen());
 
-      case ChatScreen.routeName:
-        final arguments = settings.arguments as ChatScreen;
+      case ChatPage.routeName:
+        final arguments = settings.arguments as ChatPage;
         return MaterialPageRoute(
-            builder: (context) => ChatScreen(
+            builder: (context) => ChatPage(
                   receiverId: arguments.receiverId,
                   profile: arguments.profile,
                   isGroupChat: arguments.isGroupChat,

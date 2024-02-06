@@ -1,5 +1,5 @@
 import 'package:chat_app_flutter/core/di/injection.dart';
-import 'package:chat_app_flutter/features/data/models/user_model.dart';
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/domain/usecases/app_use_cases.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,9 @@ class UserCubit extends Cubit<UserState> {
 
   UserModel? userModel;
   Future<void> getCurrentUser() async {
-    final result = await usecase().user.getCurrentUserData();
+    final result = await usecase()
+        .user
+        .getCurrentUserData(); //type: Either<Failure, UserModel>
     result.fold(
       (error) => emit(UserError(message: error.message)),
       (success) {
@@ -22,15 +24,8 @@ class UserCubit extends Cubit<UserState> {
     );
   }
 
-  //this function for get your friend data such as name, status, image etc for chat app bar status
-  Stream<UserState> getUserById(String id) async* {
-    yield UserLoadingState();
-    try {
-      final result = usecase().user.getUserById(id);
-      yield GetUserByIdSuccess(data: result);
-    } catch (e) {
-      yield UserError(message: e.toString());
-    }
+  Stream<UserModel> getUserById(String id) {
+    return usecase().user.getUserById(id);
   }
 
   Future<void> setUserStateStatus(bool isOnline) async {

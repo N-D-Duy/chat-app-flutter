@@ -1,4 +1,4 @@
-import 'package:chat_app_flutter/features/data/models/status_model.dart';
+import 'package:chat_app_flutter/features/domain/models/status_model.dart';
 import 'package:flutter/material.dart';
 
 class StatusList extends StatefulWidget {

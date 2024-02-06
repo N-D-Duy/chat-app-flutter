@@ -4,10 +4,10 @@ import 'package:chat_app_flutter/core/utils/constants/firebase_ref.dart';
 import 'package:chat_app_flutter/core/utils/enum/message_type.dart';
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
-import 'package:chat_app_flutter/features/data/models/chat_model.dart';
-import 'package:chat_app_flutter/features/data/models/message_model.dart';
-import 'package:chat_app_flutter/features/data/models/message_reply_model.dart';
-import 'package:chat_app_flutter/features/data/models/user_model.dart';
+import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
+import 'package:chat_app_flutter/features/domain/models/message_model.dart';
+import 'package:chat_app_flutter/features/domain/models/message_reply_model.dart';
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 

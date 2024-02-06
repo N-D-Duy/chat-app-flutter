@@ -1,6 +1,7 @@
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_state.dart';
 import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
+import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -244,7 +245,8 @@ class _SignUpBodySectionState extends State<SignUpBodySection> {
               listener: (context, state) {
                 if (state is AuthSignUpSuccess) {
                   MySnackBar.hideSnackBar(context);
-                  Navigator.pushReplacementNamed(context, MainScreen.routeName);
+                  MySnackBar.showSnackBar(context, 'Sign up success');
+                  Navigator.pushReplacementNamed(context, Login.routeName);
                 } else if (state is AuthErrorState) {
                   MySnackBar.hideSnackBar(context);
                   MySnackBar.showSnackBar(context, state.message);

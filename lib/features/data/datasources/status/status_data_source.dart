@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
-import 'package:chat_app_flutter/features/data/models/status_model.dart';
+import 'package:chat_app_flutter/features/domain/models/status_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';

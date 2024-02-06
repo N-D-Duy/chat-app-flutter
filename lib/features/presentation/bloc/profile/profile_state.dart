@@ -11,7 +11,7 @@ class ProfileInitialState extends ProfileState {}
 class ProfileLoadingState extends ProfileState {}
 
 class ProfileLoadedState<T> extends ProfileState {
-  final T profile;
+  final Profile profile;
   const ProfileLoadedState({required this.profile});
 
   @override

@@ -1,8 +1,8 @@
 import 'package:chat_app_flutter/core/utils/constants/firebase_ref.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
-import 'package:chat_app_flutter/features/data/models/account_model.dart';
-import 'package:chat_app_flutter/features/data/models/profile_model.dart';
-import 'package:chat_app_flutter/features/data/models/user_model.dart';
+import 'package:chat_app_flutter/features/domain/models/account_model.dart';
+import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 
 abstract class UserRemoteDataSource {
   Future<UserModel?> getCurrentUserData();
@@ -21,18 +21,20 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final auth = FirebaseService.auth;
   @override
   Future<UserModel?> getCurrentUserData() async {
-    var userData = await firestore
-        .collection(FirebaseRef.USER_COLLECTION)
-        .doc(auth.currentUser?.uid)
-        .get();
-
-    //If the document exists, it is converted to a UserModel object using the fromMap constructor, which takes a Map<String, dynamic> object as input.
-    // The data() method is used to retrieve the data from the document as a Map<String, dynamic> object.
-    UserModel? userModel;
-    if (userData.data() != null) {
-      userModel = UserModel.fromMap(userData.data()!);
+    UserModel? userData;
+    try {
+      userData = await firestore
+          .collection(FirebaseRef.USER_COLLECTION)
+          .doc(auth.currentUser?.uid)
+          .get()
+          .then((value) => UserModel.fromMap(value.data()!));
+    } catch (e) {
+      print(e);
     }
-    return userModel;
+
+    print(userData?.uid);
+
+    return userData;
   }
 
   @override

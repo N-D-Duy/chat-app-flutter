@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:chat_app_flutter/features/data/models/profile_model.dart';
+import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   static const String routeName = 'chat';
   final Profile profile;
   final String receiverId;
   final bool isGroupChat;
-  const ChatScreen({
+  const ChatPage({
     Key? key,
     required this.profile,
     required this.receiverId,
@@ -15,10 +15,10 @@ class ChatScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatPageState extends State<ChatPage> {
   String get senderId => widget.profile.uid;
   String get receiverId => widget.receiverId;
   String get name => widget.profile.userName;

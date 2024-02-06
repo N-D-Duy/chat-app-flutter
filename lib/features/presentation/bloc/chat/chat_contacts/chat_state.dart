@@ -12,7 +12,7 @@ class ChatLoadingState extends ChatState {}
 
 //Chat
 class GetAllChatContactsSuccess<T> extends ChatState {
-  final T data;
+  final List<Chat> data;
   const GetAllChatContactsSuccess({required this.data});
 
   @override
@@ -28,7 +28,7 @@ class ChatError extends ChatState {
 }
 
 class GetNumberOfUnreadMessagesSuccess<T> extends ChatState {
-  final T data;
+  final int data;
   const GetNumberOfUnreadMessagesSuccess({required this.data});
 
   @override

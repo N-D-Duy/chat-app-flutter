@@ -6,8 +6,8 @@ import 'package:either_dart/src/either.dart';
 import 'package:chat_app_flutter/core/utils/enum/message_type.dart';
 import 'package:chat_app_flutter/core/utils/error/exception/failure.dart';
 import 'package:chat_app_flutter/features/data/datasources/chats/chat_data_source.dart';
-import 'package:chat_app_flutter/features/data/models/message_model.dart';
-import 'package:chat_app_flutter/features/data/models/message_reply_model.dart';
+import 'package:chat_app_flutter/features/domain/models/message_model.dart';
+import 'package:chat_app_flutter/features/domain/models/message_reply_model.dart';
 import 'package:chat_app_flutter/features/data/repositories/chat_repository.dart';
 
 class ChatRepositoryImpl implements ChatRepository {

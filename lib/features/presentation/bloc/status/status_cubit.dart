@@ -6,7 +6,7 @@ import 'package:chat_app_flutter/core/di/injection.dart';
 import 'package:chat_app_flutter/features/domain/usecases/app_use_cases.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/status_model.dart';
+import '../../../domain/models/status_model.dart';
 
 part 'status_state.dart';
 

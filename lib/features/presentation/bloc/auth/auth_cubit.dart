@@ -1,9 +1,9 @@
 import 'package:chat_app_flutter/core/di/injection.dart';
 import 'package:chat_app_flutter/core/utils/hash_password.dart';
-import 'package:chat_app_flutter/features/data/models/account_model.dart';
-import 'package:chat_app_flutter/features/data/models/profile_model.dart';
-import 'package:chat_app_flutter/features/data/models/status_model.dart';
-import 'package:chat_app_flutter/features/data/models/user_model.dart';
+import 'package:chat_app_flutter/features/domain/models/account_model.dart';
+import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
+import 'package:chat_app_flutter/features/domain/models/status_model.dart';
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/domain/usecases/app_use_cases.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,8 +61,8 @@ class AuthCubit extends Cubit<AuthState> {
         UserModel user = UserModel(
             uid: userCredential.user!.uid,
             userName: userCredential.user!.email!.split('@').first,
-            profileImage: null,
-            lastSeen: DateTime.now().toIso8601String(),
+            profileImage: '',
+            lastSeen: DateTime.now(),
             groupId: [],
             status: StatusModel(
                 uid: userCredential.user!.uid,

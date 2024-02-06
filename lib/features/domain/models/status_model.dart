@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 class StatusModel {
   final String uid;
   final String username;
-
   final List<String> photoUrl;
   final DateTime createdAt;
   final String profilePicture;
@@ -43,11 +42,14 @@ class StatusModel {
     return StatusModel(
       uid: map['uid'] as String,
       username: map['username'] as String,
-      photoUrl: List<String>.from((map['photoUrl'] as List<String>)),
+      photoUrl:
+          (map['photoUrl'] as List<dynamic>).map((e) => e as String).toList(),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       profilePicture: map['profilePicture'] as String,
       statusId: map['statusId'] as String,
-      idOnAppUser: List<String>.from((map['idOnAppUser'] as List<String>)),
+      idOnAppUser: (map['idOnAppUser'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       caption: map['caption'] as String,
     );
   }

@@ -1,3 +1,4 @@
+import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,26 +11,12 @@ class ChatCubit extends Cubit<ChatState> {
   final usecase = di<AppUseCases>;
   ChatCubit() : super(ChatInitialState());
 
-  Stream<ChatState> getAllChatContacts() async* {
-    yield ChatLoadingState();
-
-    try {
-      final result = usecase().chatContacts.getChatContacts();
-      yield GetAllChatContactsSuccess(data: result);
-    } catch (error) {
-      yield ChatError(message: error.toString());
-    }
+  Stream<List<Chat>> getAllChatContacts() {
+    return usecase().chatContacts.getChatContacts();
   }
 
-  Stream<ChatState> getNumberOfUnreadMessages(String senderId) async* {
-    yield ChatLoadingState();
-
-    try {
-      final result = usecase().chatContacts.getNumOfMessageNotSeen(senderId);
-      yield GetNumberOfUnreadMessagesSuccess(data: result);
-    } catch (error) {
-      yield ChatError(message: error.toString());
-    }
+  Stream<int> getNumberOfUnreadMessages(String senderId) {
+    return usecase().chatContacts.getNumOfMessageNotSeen(senderId);
   }
 
   /* Future<void> createChat(String senderId, String receiverId) async {

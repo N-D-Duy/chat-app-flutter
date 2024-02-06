@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:chat_app_flutter/features/data/models/status_model.dart';
+import 'package:chat_app_flutter/features/domain/models/status_model.dart';
 
 class UserModel {
   String uid;
   String userName;
-  String? profileImage;
-  final String lastSeen;
+  String profileImage;
+  final DateTime lastSeen;
   final List<String> groupId;
   final StatusModel status;
   final bool isOnline;
@@ -29,7 +29,7 @@ class UserModel {
     String? uid,
     String? userName,
     String? profileImage,
-    String? lastSeen,
+    DateTime? lastSeen,
     List<String>? groupId,
     StatusModel? status,
     bool? isOnline,
@@ -52,7 +52,7 @@ class UserModel {
       'uid': uid,
       'userName': userName,
       'profileImage': profileImage,
-      'lastSeen': lastSeen,
+      'lastSeen': lastSeen.millisecondsSinceEpoch,
       'groupId': groupId,
       'status': status.toMap(),
       'isOnline': isOnline,
@@ -65,11 +65,12 @@ class UserModel {
       uid: map['uid'] as String,
       userName: map['userName'] as String,
       profileImage: map['profileImage'] as String,
-      lastSeen: map['lastSeen'] as String,
-      groupId: List<String>.from((map['groupId'] as List<String>)),
+      lastSeen: DateTime.fromMillisecondsSinceEpoch(map['lastSeen'] as int),
+      groupId:
+          (map['groupId'] as List<dynamic>).map((e) => e as String).toList(),
       status: StatusModel.fromMap(map['status'] as Map<String, dynamic>),
       isOnline: map['isOnline'] as bool,
-      chats: List<String>.from((map['chats'] as List<String>)),
+      chats: (map['chats'] as List<dynamic>).map((e) => e as String).toList(),
     );
   }
 
@@ -80,7 +81,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'User(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, status: $status, isOnline: $isOnline, chats: $chats)';
+    return 'UserModel(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, status: $status, isOnline: $isOnline, chats: $chats)';
   }
 
   @override

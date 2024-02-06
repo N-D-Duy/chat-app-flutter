@@ -20,7 +20,7 @@ class UserError extends UserState {
 }
 
 class GetUserByIdSuccess<T> extends UserState {
-  final T data;
+  final UserModel data;
   const GetUserByIdSuccess({required this.data});
 
   @override

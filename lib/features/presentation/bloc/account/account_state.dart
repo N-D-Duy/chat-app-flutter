@@ -11,7 +11,7 @@ class AccountInitialState extends AccountState {}
 class AccountLoadingState extends AccountState {}
 
 class AccountLoadedState<T> extends AccountState {
-  final T account;
+  final Account account;
   const AccountLoadedState({required this.account});
 }
 

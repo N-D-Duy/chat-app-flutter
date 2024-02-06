@@ -1,7 +1,7 @@
 import 'package:chat_app_flutter/core/utils/constants/firebase_ref.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
-import 'package:chat_app_flutter/features/data/models/chat_model.dart';
-import 'package:chat_app_flutter/features/data/models/profile_model.dart';
+import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
+import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
 
 abstract class ChatContactsRemoteDataSource {
   Stream<List<Chat>> getChatContacts();
