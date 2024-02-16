@@ -1,11 +1,11 @@
-// ignore: file_names
-import 'package:flutter/material.dart';
+// ignore_for_file: file_names
 
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/splash/splash_page.dart';
+import 'package:flutter/material.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -22,7 +22,8 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (context) => ChatPage(
                   receiverId: arguments.receiverId,
-                  profile: arguments.profile,
+                  name: arguments.name,
+                  profilePicture: arguments.profilePicture,
                   isGroupChat: arguments.isGroupChat,
                 ));
       case ProfilePage.routeName:

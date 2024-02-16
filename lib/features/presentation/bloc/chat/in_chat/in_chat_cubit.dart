@@ -40,24 +40,26 @@ class InChatCubit extends Cubit<InChatState> {
     emit(MessageSwipeState());
   }
 
-  Stream<InChatState> getGroupChatStream(String groupId) async* {
-    yield InChatLoadingState();
+  Stream<List<Message>> getGroupChatStream(String groupId) {
+    /* yield InChatLoadingState();
     try {
       final result = usecases().chat.getGroupChatStream(groupId);
       yield GetGroupChatStreamSuccess(data: result);
     } catch (error) {
       yield InChatErrorState(message: error.toString());
-    }
+    } */
+    return usecases().chat.getGroupChatStream(groupId);
   }
 
-  Stream<InChatState> getChatStream(String receiverId) async* {
-    yield InChatLoadingState();
+  Stream<List<Message>> getChatStream(String receiverId) {
+    /* yield InChatLoadingState();
     try {
       final result = usecases().chat.getChatStream(receiverId);
       yield GetChatStreamSuccess(data: result);
     } catch (error) {
       yield InChatErrorState(message: error.toString());
-    }
+    } */
+    return usecases().chat.getChatStream(receiverId);
   }
 
   Future<void> sendTextMessage(

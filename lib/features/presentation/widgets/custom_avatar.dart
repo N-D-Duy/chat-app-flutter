@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 
 class CustomImage extends StatelessWidget {
   final String imageUrl;
-  const CustomImage({super.key, required this.imageUrl});
+  final double? radius;
+  const CustomImage({super.key, required this.imageUrl, this.radius});
 
   @override
   Widget build(BuildContext context) {
+    final height = radius != null ? radius! * 2 : null;
     return ClipOval(
-      child: CircleAvatar(
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          placeholder: (context, url) => const CircularProgressIndicator(),
-          errorWidget: (context, url, error) =>
-              Image.asset("assets/images/default_avatar.jpg"),
-          fit: BoxFit.cover,
-        ),
+      child: CachedNetworkImage(
+        height: height,
+        imageUrl: imageUrl,
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        errorWidget: (context, url, error) =>
+            Image.asset("assets/images/default_avatar.jpg"),
+        fit: BoxFit.cover,
       ),
     );
   }

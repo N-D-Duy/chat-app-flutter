@@ -1,9 +1,15 @@
 import 'dart:ui';
 
 class AppColor {
+  static Color black = const Color(0xFF000000);
+  static Color blue = const Color(0xFF0000FF);
+  static Color cyan = const Color(0xFF00FFFF);
+  static Color green = const Color(0xFF00FF00);
+  static Color grey = const Color(0xFF9E9E9E);
+  static Color red = const Color(0xFFFF0000);
   static Color itemBottomNavigationColor = const Color(0xFF757575);
   static Color itemBottomNavigationSelectedColor = const Color(0xFF00BFA5);
-  static Color primaryColor = const Color(0xFF00BFA5);
+  static Color primaryColor = const Color(0xFFFFFFFF);
   static Color primaryColorLight = const Color(0xFFB2DFDB);
   static Color primaryColorDark = const Color(0xFF00897B);
   static Color secondaryColor = const Color(0xFF00BFA5);

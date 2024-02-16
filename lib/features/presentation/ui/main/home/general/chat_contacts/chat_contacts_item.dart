@@ -1,7 +1,9 @@
 import 'package:chat_app_flutter/core/utils/extensions/time_extension.dart';
 import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/chat/chat_contacts/chat_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/chat_item.dart';
+import 'package:chat_app_flutter/features/presentation/widgets/custom_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,23 +19,24 @@ class ChatContactsCard extends StatelessWidget {
       builder: (context, snapshot) {
         return CustomListTile(
           onTap: () {
-            // Navigator.pushNamed(context, ChatPage.routeName,
-            //     arguments: ChatPage(
-            //       name: chat.name,
-            //       receiverId: chat.contactId,
-            //       profilePicture: chat.profileUrl,
-            //       isGroupChat: false,
-            //     ));
+            Navigator.pushNamed(context, ChatPage.routeName,
+                arguments: ChatPage(
+                  name: chat.name,
+                  receiverId: chat.contactId,
+                  profilePicture: chat.profileUrl,
+                  isGroupChat: false,
+                ));
           },
           leading: Hero(
             tag: chat.name,
             child: InkWell(
                 // onTap: () => showContactProfileDialog(context,chatContactData),
-                // child: CustomNetworkImage(
-                //   imageUrl: chatContactData.profilePicture,
-                //   radius: 30,
-                // )
-                ),
+                child: CustomImage(
+              imageUrl: chat.profileUrl.isEmpty
+                  ? "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+                  : chat.profileUrl,
+              radius: 30,
+            )),
           ),
           title: chat.name,
           subTitle: chat.lastMessage,

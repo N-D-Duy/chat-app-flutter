@@ -14,9 +14,7 @@ class HomePages extends StatelessWidget {
       appBar: const HomeBar(),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        children: const [
-          ContactsList() /* , ChatContactList(), ChatGroupList() */
-        ],
+        children: const [ContactsList(), ChatContactList(), ChatGroupList()],
       ),
     );
   }

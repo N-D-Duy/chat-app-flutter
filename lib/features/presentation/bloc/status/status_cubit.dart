@@ -18,7 +18,6 @@ class StatusCubit extends Cubit<StatusState> {
   Future<void> addStatus(
       {required String username,
       required String profilePicture,
-      required String phoneNumber,
       required File statusImage,
       required List<String> uidOnAppContact,
       required String caption}) async {
@@ -26,7 +25,6 @@ class StatusCubit extends Cubit<StatusState> {
     final result = await repository.uploadStatus(
         username: username,
         profilePicture: profilePicture,
-        phoneNumber: phoneNumber,
         statusImage: statusImage,
         uidOnAppContact: uidOnAppContact,
         caption: caption);

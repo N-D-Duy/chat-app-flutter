@@ -16,13 +16,11 @@ class StatusUseCases implements StatusRepository {
   Future<Either<Failure, void>> uploadStatus(
       {required String username,
       required String profilePicture,
-      required String phoneNumber,
       required File statusImage,
       required List<String> uidOnAppContact,
       required String caption}) {
     if (username.isEmpty ||
         profilePicture.isEmpty ||
-        phoneNumber.isEmpty ||
         statusImage.path.isEmpty ||
         uidOnAppContact.isEmpty ||
         caption.isEmpty) {
@@ -31,7 +29,6 @@ class StatusUseCases implements StatusRepository {
       return _statusRepository.uploadStatus(
           username: username,
           profilePicture: profilePicture,
-          phoneNumber: phoneNumber,
           statusImage: statusImage,
           uidOnAppContact: uidOnAppContact,
           caption: caption);

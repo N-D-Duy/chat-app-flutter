@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
+import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
 import 'package:chat_app_flutter/features/domain/models/group_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
@@ -16,11 +15,11 @@ abstract class GroupsRemoteDataSource {
 }
 
 class GroupsRemoteDataSourceImpl extends GroupsRemoteDataSource {
-  final FirebaseFirestore firestore;
-  final FirebaseAuth auth;
-  final FirebaseStorage firebaseStorage;
+  final firestore = FirebaseService.firestore;
+  final auth = FirebaseService.auth;
+  final firebaseStorage = FirebaseService.storage;
 
-  GroupsRemoteDataSourceImpl(this.firestore, this.auth, this.firebaseStorage);
+  GroupsRemoteDataSourceImpl();
 
   //The createGroup method is a function that creates a new group in a messaging application.
   @override
@@ -84,7 +83,6 @@ class GroupsRemoteDataSourceImpl extends GroupsRemoteDataSource {
 
   @override
   Stream<int> getNumOfMessageNotSeen(String senderId) {
-    // TODO: implement getNumOfMessageNotSeen
     throw UnimplementedError();
   }
 }

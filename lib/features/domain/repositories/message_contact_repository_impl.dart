@@ -1,8 +1,8 @@
 import 'package:chat_app_flutter/features/data/datasources/chat_contacts/chat_contacts.dart';
 import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
-import 'package:chat_app_flutter/features/data/repositories/message_contact_repository.dart';
+import 'package:chat_app_flutter/features/data/repositories/chat_contact_repository.dart';
 
-class MessageContactRepositoryImpl implements MessageContactRepository {
+class MessageContactRepositoryImpl implements ChatContactRepository {
   final ChatContactsRemoteDataSource _messageContactDataSource;
 
   MessageContactRepositoryImpl(this._messageContactDataSource);

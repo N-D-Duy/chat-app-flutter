@@ -29,9 +29,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           .get()
           .then((value) => UserModel.fromMap(value.data()!));
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
 
+    // ignore: avoid_print
     print(userData?.uid);
 
     return userData;

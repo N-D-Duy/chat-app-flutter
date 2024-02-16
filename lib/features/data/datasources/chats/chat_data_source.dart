@@ -195,7 +195,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       // users -> current user id  => chats -> receiver user id -> set data
       var receiverChatContact = Chat(
           name: senderUserData.userName,
-          profileUrl: senderUserData.profileImage ?? '',
+          profileUrl: senderUserData.profileImage,
           contactId: senderUserData.uid,
           lastMessage: text,
           lastMessageTime: timeSent);
@@ -209,7 +209,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       // users -> receiver user id  => chats -> current user id  -> set data
       var senderChatContact = Chat(
           name: receiverUserData.userName,
-          profileUrl: receiverUserData.profileImage ?? '',
+          profileUrl: receiverUserData.profileImage,
           contactId: receiverUserData.uid,
           lastMessage: text,
           lastMessageTime: timeSent);
@@ -244,14 +244,14 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       timeSent: timeSent,
       messageId: messageId,
       isRead: false,
-      replyMessage: messageReply == null ? '' : messageReply.message,
+      repliedMessage: messageReply == null ? '' : messageReply.message,
       senderName: senderUsername,
-      replyTo: messageReply == null
+      repliedTo: messageReply == null
           ? ''
           : messageReply.isMe
               ? senderUsername
               : messageReply.repliedTo,
-      replyMessageType:
+      repliedMessageType:
           messageReply == null ? MessageType.text : messageReply.messageType,
     );
 

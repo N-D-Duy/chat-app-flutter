@@ -43,7 +43,8 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               CircleAvatar(
                 radius: 60,
-                backgroundImage: AssetImage('assets/images/profile_avatar.jpg'),
+                backgroundImage: NetworkImage(
+                    'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'),
               ),
               SizedBox(height: 10),
               Text('John Doe',
@@ -107,12 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              // Đóng hộp thoại và thực hiện xử lý khi ấn nút "Yes"
                               BlocProvider.of<AuthCubit>(context).signOut();
                               Navigator.pushReplacementNamed(
                                   context, Login.routeName);
-                              // Thực hiện log out ở đây
-                              // ...
                             },
                             child: const Text('Yes',
                                 style: TextStyle(color: Colors.red)),

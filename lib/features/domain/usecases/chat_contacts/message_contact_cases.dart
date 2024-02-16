@@ -1,9 +1,9 @@
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
 import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
-import 'package:chat_app_flutter/features/data/repositories/message_contact_repository.dart';
+import 'package:chat_app_flutter/features/data/repositories/chat_contact_repository.dart';
 
-class ChatContactsUseCase implements MessageContactRepository {
-  final MessageContactRepository _repository;
+class ChatContactsUseCase implements ChatContactRepository {
+  final ChatContactRepository _repository;
 
   ChatContactsUseCase(this._repository);
 

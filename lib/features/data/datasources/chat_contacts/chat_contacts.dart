@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:chat_app_flutter/core/utils/constants/firebase_ref.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
 import 'package:chat_app_flutter/features/domain/models/chat_model.dart';
@@ -11,17 +13,17 @@ abstract class ChatContactsRemoteDataSource {
 
 class MessageContactsRemoteDataSourceImpl
     implements ChatContactsRemoteDataSource {
-  final firestore = FirebaseService.firestore;
+  final fireStore = FirebaseService.firestore;
   final auth = FirebaseService.auth;
   MessageContactsRemoteDataSourceImpl();
   @override
   Stream<List<Chat>> getChatContacts() {
     // The method first gets the currently authenticated user's uid from FirebaseAuth, and then queries the Firestore database for a collection of chat
     // messages for that user. The result of this query is a Stream of query snapshots.
-    return firestore
+    return fireStore
         .collection(FirebaseRef.USER_COLLECTION)
         .doc(auth.currentUser!.uid)
-        .collection(FirebaseRef.CHAT_COLLECTION)
+        .collection('chats')
         .snapshots()
         .asyncMap((event) async {
       // The asyncMap method is used to transform each query snapshot into a List of ChatContactModel objects.
@@ -30,7 +32,7 @@ class MessageContactsRemoteDataSourceImpl
       for (var document in event.docs) {
         var chatContact = Chat.fromMap(document.data());
         //Then, another query is made to fetch the user data of the corresponding contact using the contactId field of the ChatContactModel object.
-        var userData = await firestore
+        var userData = await fireStore
             .collection(FirebaseRef.PROFILE_COLLECTION)
             .doc(chatContact.contactId)
             .get();
@@ -52,7 +54,7 @@ class MessageContactsRemoteDataSourceImpl
 
   @override
   Stream<int> getNumOfMessageNotSeen(String senderId) {
-    return firestore
+    return fireStore
         .collection(FirebaseRef.USER_COLLECTION)
         .doc(auth.currentUser!.uid)
         .collection('chats')

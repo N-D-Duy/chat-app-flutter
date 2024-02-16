@@ -1,7 +1,11 @@
 import 'package:chat_app_flutter/core/utils/routes/Approutes.dart';
 import 'package:chat_app_flutter/core/di/injection.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/call/call_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/chat/bottom_chat/bottom_chat_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/chat/chat_contacts/chat_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/chat/chat_groups/chat_group_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/chat/in_chat/in_chat_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/contacts/contacts_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/pages/page_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/profile/profile_cubit.dart';
@@ -36,7 +40,10 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(create: (context) => PageCubit()),
         BlocProvider(create: (context) => ContactsCubit()),
-
+        BlocProvider(create: (context) => ChatGroupCubit()),
+        BlocProvider(create: (context) => InChatCubit()),
+        BlocProvider(create: (context) => CallCubit()),
+        BlocProvider(create: (context) => BottomChatCubit()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

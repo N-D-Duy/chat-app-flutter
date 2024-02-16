@@ -1,7 +1,7 @@
 import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/pages/page_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/calls/history/call_history_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/calls/call_list_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/general/home_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/status/status_page.dart';
@@ -70,7 +70,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       case 0:
         return const HomePages();
       case 1:
-        return const CallHistoryPage();
+        return const CallListPage();
       case 2:
         return const StatusPage();
       case 3:
@@ -176,7 +176,7 @@ class CustomBottomNavigationItem extends StatelessWidget {
                     ? TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: AppColor.primaryColor)
+                        color: AppColor.itemBottomNavigationSelectedColor)
                     : const TextStyle(fontSize: 11),
               ),
             ],

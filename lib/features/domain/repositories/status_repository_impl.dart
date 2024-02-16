@@ -20,7 +20,6 @@ class StatusRepositoryImpl implements StatusRepository {
   Future<Either<Failure, void>> uploadStatus(
       {required String username,
       required String profilePicture,
-      required String phoneNumber,
       required File statusImage,
       required List<String> uidOnAppContact,
       required String caption}) async {

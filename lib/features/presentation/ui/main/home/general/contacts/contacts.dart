@@ -1,4 +1,5 @@
 import 'package:chat_app_flutter/features/presentation/bloc/contacts/contacts_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/general/contacts/contacts_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ class ContactsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ContactsCubit>(context).getAllContacts();
     return SizedBox(
       height: 150,
       child: Column(
@@ -32,16 +34,36 @@ class ContactsList extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (state is GetAllContactsSuccess) {
-                return ListView.builder(
-                  itemCount: state.contacts.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final contact = state.contacts[index];
-                    return ContactsCard(
-                      image: contact.profileImage,
-                      name: contact.userName,
-                    );
-                  },
+                return SizedBox(
+                  height: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListView.builder(
+                      itemCount: state.contacts.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final contact = state.contacts[index];
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              ChatPage.routeName,
+                              arguments: ChatPage(
+                                name: contact.userName,
+                                receiverId: contact.uid,
+                                profilePicture: contact.profileImage,
+                                isGroupChat: false,
+                              ),
+                            );
+                          },
+                          child: ContactsCard(
+                            image: contact.profileImage,
+                            name: contact.userName,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               } else if (state is GetAllContactsError) {
                 return Center(

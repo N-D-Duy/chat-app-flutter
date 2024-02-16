@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:chat_app_flutter/core/utils/error/exception/my_exception.dart';
@@ -123,11 +125,11 @@ class StatusRemoteDataSourceImpl extends StatusRemoteDataSource {
           in query.snapshots()) {
         print("statusesSnapshot $statusesSnapshot");
         //For each snapshot, it creates a new list of StatusModel objects by iterating through each document in the snapshot and converting its data to a StatusModel object.
-        statusesSnapshot.docs.forEach((doc) {
+        for (var doc in statusesSnapshot.docs) {
           print("status $doc");
           final StatusModel tempStatus = StatusModel.fromMap(doc.data());
           statusData.add(tempStatus);
-        });
+        }
         //Finally, it yields the list of StatusModel objects as a stream.
         yield statusData.toList();
       }

@@ -49,7 +49,7 @@ class MyCirlceAvatar extends StatelessWidget {
           Text(
             name,
             textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis, 
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 12,

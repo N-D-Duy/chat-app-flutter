@@ -12,10 +12,10 @@ class Message {
   final DateTime timeSent;
   final bool isRead;
   final MessageType messageType;
-  //
-  final MessageType replyMessageType;
-  final String replyMessage;
-  final String replyTo;
+  //reply message
+  final MessageType repliedMessageType;
+  final String repliedMessage;
+  final String repliedTo;
   Message({
     required this.messageId,
     required this.content,
@@ -25,9 +25,9 @@ class Message {
     required this.timeSent,
     required this.isRead,
     required this.messageType,
-    required this.replyMessageType,
-    required this.replyMessage,
-    required this.replyTo,
+    required this.repliedMessageType,
+    required this.repliedMessage,
+    required this.repliedTo,
   });
 
   Message copyWith({
@@ -52,9 +52,9 @@ class Message {
       timeSent: timeSent ?? this.timeSent,
       isRead: isRead ?? this.isRead,
       messageType: messageType ?? this.messageType,
-      replyMessageType: replyMessageType ?? this.replyMessageType,
-      replyMessage: replyMessage ?? this.replyMessage,
-      replyTo: replyTo ?? this.replyTo,
+      repliedMessageType: replyMessageType ?? repliedMessageType,
+      repliedMessage: replyMessage ?? repliedMessage,
+      repliedTo: replyTo ?? repliedTo,
     );
   }
 
@@ -68,9 +68,9 @@ class Message {
       'timeSent': timeSent.millisecondsSinceEpoch,
       'isRead': isRead,
       'messageType': messageType.type,
-      'replyMessageType': replyMessageType.type,
-      'replyMessage': replyMessage,
-      'replyTo': replyTo,
+      'replyMessageType': repliedMessageType.type,
+      'replyMessage': repliedMessage,
+      'replyTo': repliedTo,
     };
   }
 
@@ -84,9 +84,9 @@ class Message {
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent'] as int),
       isRead: map['isRead'] as bool,
       messageType: (map['messageType'] as String).toEnum(),
-      replyMessageType: (map['replyMessageType'] as String).toEnum(),
-      replyMessage: map['replyMessage'] as String,
-      replyTo: map['replyTo'] as String,
+      repliedMessageType: (map['replyMessageType'] as String).toEnum(),
+      repliedMessage: map['replyMessage'] as String,
+      repliedTo: map['replyTo'] as String,
     );
   }
 
@@ -97,7 +97,7 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, receiverId: $receiverId, timeSent: $timeSent, isRead: $isRead, messageType: $messageType, replyMessageType: $replyMessageType, replyMessage: $replyMessage, replyTo: $replyTo)';
+    return 'Message(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, receiverId: $receiverId, timeSent: $timeSent, isRead: $isRead, messageType: $messageType, replyMessageType: $repliedMessageType, replyMessage: $repliedMessage, replyTo: $repliedTo)';
   }
 
   @override
@@ -112,9 +112,9 @@ class Message {
         other.timeSent == timeSent &&
         other.isRead == isRead &&
         other.messageType == messageType &&
-        other.replyMessageType == replyMessageType &&
-        other.replyMessage == replyMessage &&
-        other.replyTo == replyTo;
+        other.repliedMessageType == repliedMessageType &&
+        other.repliedMessage == repliedMessage &&
+        other.repliedTo == repliedTo;
   }
 
   @override
@@ -127,8 +127,8 @@ class Message {
         timeSent.hashCode ^
         isRead.hashCode ^
         messageType.hashCode ^
-        replyMessageType.hashCode ^
-        replyMessage.hashCode ^
-        replyTo.hashCode;
+        repliedMessageType.hashCode ^
+        repliedMessage.hashCode ^
+        repliedTo.hashCode;
   }
 }
