@@ -18,12 +18,12 @@ class ChatGroupCard extends StatelessWidget {
         Navigator.pushNamed(
           context,
           ChatPage.routeName,
-          /* arguments: ChatPage(
-                name: groupData.name,
-                receiverId: groupData.groupId,
-                profilePicture: groupData.groupProfilePic,
+           arguments: ChatPage(
+                name: group.name,
+                receiverId: group.groupId,
+                profilePicture: group.groupProfilePic,
                 isGroupChat: true,
-            ) */
+            )
         );
       },
       leading: Hero(

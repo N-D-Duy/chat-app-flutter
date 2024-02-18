@@ -1,6 +1,7 @@
 import 'package:chat_app_flutter/features/presentation/bloc/contacts/contacts_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/general/contacts/contacts_card.dart';
+import 'package:chat_app_flutter/features/presentation/widgets/custom_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +32,11 @@ class ContactsList extends StatelessWidget {
             builder: (context, state) {
               if (state is GetAllContactsLoading) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CustomLoading(
+                      borderColor: Colors.red,
+                      backgroundColor: Colors.red,
+                      size: 30,
+                      opacity: 0.5),
                 );
               } else if (state is GetAllContactsSuccess) {
                 return SizedBox(
@@ -45,6 +50,7 @@ class ContactsList extends StatelessWidget {
                         final contact = state.contacts[index];
                         return InkWell(
                           onTap: () {
+                            print('contact: $contact');
                             Navigator.pushNamed(
                               context,
                               ChatPage.routeName,

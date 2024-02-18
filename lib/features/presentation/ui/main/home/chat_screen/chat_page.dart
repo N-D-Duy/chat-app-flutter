@@ -4,8 +4,12 @@ import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/components/chat_page_bar.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/components/message_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChatPage extends StatelessWidget {
+import '../../../../../data/datasources/others/change_background_color.dart';
+import '../../../../bloc/others/background_chat/background_cubit.dart';
+
+class ChatPage extends StatefulWidget {
   static const String routeName = 'chat_page';
   final String name;
   final String receiverId;
@@ -20,26 +24,87 @@ class ChatPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: ChatPageBar(
-          name: name,
-          receiverId: receiverId,
-          profilePicture: profilePicture,
-          isGroupChat: isGroupChat,
+          name: widget.name,
+          receiverId: widget.receiverId,
+          profilePicture: widget.profilePicture,
+          isGroupChat: widget.isGroupChat,
         ),
         body: Stack(
           children: [
+            BlocBuilder<BackgroundCubit, BackgroundState>(
+              builder: (context, state) {
+                context.watch<BackgroundCubit>().loadBackgroundColor();
+                if (state is GetBackgroundSuccess) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: state.gradientColors,
+                      ),
+                    ),
+                  );
+                } else if (state is InitialBackground) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: state.defaultBackground,
+                      ),
+                    ),
+                  );
+                } else if (state is ChangeBackgroundLoading) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.white, Colors.white],
+                      ),
+                    ),
+                  );
+                } else if (state is BackgroundError) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.white, Colors.white],
+                      ),
+                    ),
+                  );
+                }
+                return Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.white, Colors.white],
+                    ),
+                  ),
+                );
+              },
+            ),
             Column(
               children: [
                 Expanded(
                     child: MessagesList(
-                        receiverId: receiverId, isGroupChat: isGroupChat)),
+                        receiverId: widget.receiverId, isGroupChat: widget.isGroupChat)),
                 BottomChatFieldIcon(
-                    receiverId: receiverId, isGroupChat: isGroupChat)
+                    receiverId: widget.receiverId, isGroupChat: widget.isGroupChat)
               ],
             ),
-            RecordingMic(receiverId: receiverId, isGroupChat: isGroupChat)
+            RecordingMic(receiverId: widget.receiverId, isGroupChat: widget.isGroupChat)
           ],
         ));
   }

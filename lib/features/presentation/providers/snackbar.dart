@@ -4,7 +4,7 @@ class MySnackBar{
   static void showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
     );
   }
 
@@ -12,3 +12,4 @@ class MySnackBar{
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 }
+

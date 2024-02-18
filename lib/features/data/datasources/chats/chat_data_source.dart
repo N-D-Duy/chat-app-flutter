@@ -38,15 +38,16 @@ abstract class ChatRemoteDataSource {
 }
 
 class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
-  final firestore = FirebaseService.firestore;
+  final fireStore = FirebaseService.firestore;
   final auth = FirebaseService.auth;
   final firebaseStorage = FirebaseService.storage;
+
 
   ChatRemoteDataSourceImpl();
 
   Future<UserModel> _getCurrentUser() async {
     var userCollection =
-        await firestore.collection("users").doc(auth.currentUser!.uid).get();
+        await fireStore.collection("users").doc(auth.currentUser!.uid).get();
     UserModel user = UserModel.fromMap(userCollection.data()!);
     return user;
   }
@@ -55,7 +56,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   @override
   Stream<List<Message>> getChatStream(String receiverId) {
     //The method first gets a reference to the Firestore database and constructs a query to fetch messages from the current user's chat with the given receiverId.
-    return firestore
+    return fireStore
         .collection(FirebaseRef.USER_COLLECTION)
         .doc(auth.currentUser!.uid)
         .collection('chats')
@@ -79,7 +80,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
   @override
   Stream<List<Message>> getGroupChatStream(String groupId) {
-    return firestore
+    return fireStore
         .collection('groups')
         .doc(groupId)
         .collection('chats')
@@ -112,7 +113,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
       if (!isGroupChat) {
         var receiverUserCollection =
-            await firestore.collection("users").doc(receiverId).get();
+            await fireStore.collection("users").doc(receiverId).get();
         receiverUserData = UserModel.fromMap(receiverUserCollection.data()!);
       }
 
@@ -154,7 +155,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       UserModel? receiverUserData;
       if (!isGroupChat) {
         var receiverUserCollection =
-            await firestore.collection("users").doc(receiverId).get();
+            await fireStore.collection("users").doc(receiverId).get();
         receiverUserData = UserModel.fromMap(receiverUserCollection.data()!);
       }
 
@@ -185,7 +186,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       DateTime timeSent,
       bool isGroupChat) async {
     if (isGroupChat) {
-      await firestore.collection("groups").doc(receiverId).update({
+      await fireStore.collection("groups").doc(receiverId).update({
         'lastMessage': text,
         'timeSent': DateTime.now().millisecondsSinceEpoch
       });
@@ -199,7 +200,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
           contactId: senderUserData.uid,
           lastMessage: text,
           lastMessageTime: timeSent);
-      await firestore
+      await fireStore
           .collection("users")
           .doc(receiverUserData!.uid)
           .collection("chats")
@@ -213,7 +214,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
           contactId: receiverUserData.uid,
           lastMessage: text,
           lastMessageTime: timeSent);
-      await firestore
+      await fireStore
           .collection("users")
           .doc(senderUserData.uid)
           .collection("chats")
@@ -257,7 +258,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
     if (isGroupChat) {
       // groups -> group id -> chat -> message
-      await firestore
+      await fireStore
           .collection('groups')
           .doc(receiverId)
           .collection('chats')
@@ -266,7 +267,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
     } else {
       // user -> user id -> receiver id -> messages -> messages id -> store message
       //The first location is under the sender's user ID, in a chats collection, which contains a document for the receiver's user ID, which, in turn, contains a messages collection
-      await firestore
+      await fireStore
           .collection("users")
           .doc(senderId)
           .collection("chats")
@@ -277,7 +278,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
       // user -> receiver id ->  user id -> messages -> messages id -> store message
       //The second location is under the receiver's user ID, in a chats collection, which contains a document for the sender's user ID, which, in turn, contains a messages collection.
-      await firestore
+      await fireStore
           .collection("users")
           .doc(receiverId)
           .collection("chats")
@@ -307,14 +308,15 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       UserModel? receiverUserData;
       if (!isGroupChat) {
         var receiverUserCollection =
-            await firestore.collection("users").doc(receiverId).get();
+            await fireStore.collection("users").doc(receiverId).get();
         receiverUserData = UserModel.fromMap(receiverUserCollection.data()!);
       }
 
       //Stores the file to Firebase Storage using the _storeFileToFirebase() method, which uploads the file to Firebase Storage and
       // returns the download URL of the uploaded file.
+
       var fileUrl = await _storeFileToFirebase(
-        'chat/${messageType.type}/${senderUserData.uid}/$receiverId/$messageId}',
+        'chat/${messageType.type}/${senderUserData.uid}/$receiverId/$messageId',
         file,
       );
 
@@ -331,6 +333,9 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
           break;
         case MessageType.gif:
           contactMessage = 'Gif';
+          break;
+        case MessageType.file:
+          contactMessage = '📁 File';
           break;
         default:
           contactMessage = 'Other';
@@ -361,14 +366,20 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
   //This is method uploads a file to Firebase Storage and returns the download URL of the uploaded file.
   Future<String> _storeFileToFirebase(String path, File file) async {
-    //First, the method creates an UploadTask object using the putFile method of the Firebase Storage reference. The path parameter is used as
-    // the path of the file in Firebase Storage, and the file parameter is used as the actual file to be uploaded
-    UploadTask uploadTask = firebaseStorage.ref().child(path).putFile(file);
-    //Next, the method waits for the upload to complete by awaiting the UploadTask object. The result of the upload is a TaskSnapshot object,
-    // which contains information about the uploaded file, such as its download URL.
-    TaskSnapshot snapshot = await uploadTask;
-    //Finally, the method gets the download URL of the uploaded file by calling the getDownloadURL method on the TaskSnapshot object, and returns it as a String.
-    String downloadUrl = await snapshot.ref.getDownloadURL();
+    String downloadUrl = '';
+    try{
+      //First, the method creates an UploadTask object using the putFile method of the Firebase Storage reference. The path parameter is used as
+      // the path of the file in Firebase Storage, and the file parameter is used as the actual file to be uploaded
+      UploadTask uploadTask = firebaseStorage.ref().child(path).putFile(file);
+      //Next, the method waits for the upload to complete by awaiting the UploadTask object. The result of the upload is a TaskSnapshot object,
+      // which contains information about the uploaded file, such as its download URL.
+      TaskSnapshot snapshot = await uploadTask;
+      //Finally, the method gets the download URL of the uploaded file by calling the getDownloadURL method on the TaskSnapshot object, and returns it as a String.
+       downloadUrl = await snapshot.ref.getDownloadURL();
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+    print('Download URL: $downloadUrl');
     return downloadUrl;
   }
 
@@ -379,7 +390,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
     try {
       // The first update operation marks the message as seen in the sender's chat,
       // The isSeen field is updated to true in both cases, indicating that the message has been seen.
-      await firestore
+      await fireStore
           .collection("users")
           .doc(auth.currentUser!.uid)
           .collection("chats")
@@ -389,7 +400,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
           .update({'isSeen': true});
 
       // while the second update operation marks the same message as seen in the receiver's chat.
-      await firestore
+      await fireStore
           .collection("users")
           .doc(receiverId)
           .collection("chats")

@@ -4,7 +4,7 @@ extension DateUtil on DateTime {
   //The getLastSeen  returns a string that represents the date and time when the instance of the DateTime class was last seen. The string is constructed
   // using two methods of the DateConverter class: getLastSeenDayTime and dateConverterHoursAmPmMode.
   String get getLastSeen {
-    return 'last seen ${DateConverter.getLastSeenDayTime(this)} at ${DateConverter.dateConverterHoursAmPmMode(this)}';
+    return '${DateConverter.getLastSeenDayTime(this)} at ${DateConverter.dateConverterHoursAmPmMode(this)}';
   }
 
   String get getChatContactTime {

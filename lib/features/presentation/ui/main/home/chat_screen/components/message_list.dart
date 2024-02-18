@@ -8,6 +8,7 @@ import 'package:chat_app_flutter/features/domain/models/message_model.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/chat/in_chat/in_chat_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/components/my_message_card.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/components/receiver_message_card.dart';
+import 'package:chat_app_flutter/features/presentation/widgets/custom_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,12 @@ class _MessagesListState extends State<MessagesList> {
           : context.read<InChatCubit>().getChatStream(widget.receiverId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CustomLoading(
+                  borderColor: Colors.blueGrey,
+                  backgroundColor: Colors.grey,
+                  size: 80,
+                  opacity: 0.3));
         }
         //this code is used to automatically scroll to the bottom of a scrollable widget, after the widget has finished rendering its content.
         SchedulerBinding.instance.addPostFrameCallback((_) {

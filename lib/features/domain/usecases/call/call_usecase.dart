@@ -16,14 +16,9 @@ class CallUseCase extends CallRepository {
 
   @override
   Future<void> endCall({required String callerId, required String receiverId}) {
-    if (callerId == receiverId) {
-      return Future.error(Exception("You can't call yourself"));
-    } else {
       return _callRepository.endCall(
           callerId: callerId, receiverId: receiverId);
-    }
   }
-
   @override
   Stream<List<CallModel>> getCallHistory() => _callRepository.getCallHistory();
 
@@ -32,13 +27,10 @@ class CallUseCase extends CallRepository {
       {required String receiverId,
       required String receiverName,
       required String receiverPic}) {
-    if (receiverId == receiverId) {
-      return Future.error(Exception("You can't call yourself"));
-    } else {
+
       return _callRepository.makeCall(context,
           receiverId: receiverId,
           receiverName: receiverName,
           receiverPic: receiverPic);
-    }
   }
 }

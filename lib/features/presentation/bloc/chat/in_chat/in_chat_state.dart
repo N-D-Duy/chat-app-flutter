@@ -45,7 +45,7 @@ class CancelReplayState extends InChatState {}
 
 class MessageSwipeState extends InChatState {}
 
-class MessageReadedSuccess extends InChatState {}
+class MessageSeenSuccess extends InChatState {}
 
 class MessageDeleted extends InChatState {}
 

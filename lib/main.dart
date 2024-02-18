@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:chat_app_flutter/core/utils/routes/Approutes.dart';
 import 'package:chat_app_flutter/core/di/injection.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:chat_app_flutter/features/presentation/bloc/chat/chat_contacts/c
 import 'package:chat_app_flutter/features/presentation/bloc/chat/chat_groups/chat_group_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/chat/in_chat/in_chat_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/contacts/contacts_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/others/background_chat/background_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/pages/page_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/profile/profile_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/status/status_cubit.dart';
@@ -16,12 +18,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/presentation/ui/main/media/camera_page.dart';
+
 Future<void> main() async {
   await initialDependencies();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.web,
   );
+  cameras = await availableCameras();
   runApp(const MainApp());
 }
 
@@ -44,6 +49,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => InChatCubit()),
         BlocProvider(create: (context) => CallCubit()),
         BlocProvider(create: (context) => BottomChatCubit()),
+        BlocProvider(create: (context) => BackgroundCubit())
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

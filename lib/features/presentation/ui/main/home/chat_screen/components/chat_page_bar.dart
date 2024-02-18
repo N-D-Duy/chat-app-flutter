@@ -1,13 +1,23 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app_flutter/core/utils/extensions/time_extension.dart';
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/others/background_chat/background_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app_flutter/features/presentation/widgets/custom_avatar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../../data/datasources/others/change_background_color.dart';
+import '../../../../../bloc/call/call_cubit.dart';
 
 class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
   final String receiverId;
   final String profilePicture;
   final bool isGroupChat;
+
   const ChatPageBar({
     Key? key,
     required this.name,
@@ -18,69 +28,106 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 5,
-      shadowColor: Colors.grey.withOpacity(0.5),
-      title: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            child: Stack(
+    if (isGroupChat) {
+      //not available yet
+    }
+
+    return StreamBuilder<UserModel>(
+        stream: context.read<UserCubit>().getUserById(receiverId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return AppBar(
+              backgroundColor: Colors.white,
+              elevation: 5,
+              shadowColor: Colors.grey,
+              title: const Text("Loading..."),
+            );
+          }
+          UserModel user = snapshot.data!;
+          print('user: $user');
+          return AppBar(
+            backgroundColor: Colors.white,
+            elevation: 5,
+            shadowColor: Colors.grey.withOpacity(0.5),
+            title: Row(
               children: [
-                CustomImage(
-                    imageUrl: profilePicture.isEmpty
-                        ? "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
-                        : profilePicture,
-                    radius: 20),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10)),
+                SizedBox(
+                  width: 40,
+                  child: Stack(
+                    children: [
+                      CustomImage(
+                          imageUrl: profilePicture.isEmpty
+                              ? "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+                              : profilePicture,
+                          radius: 20),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              color: user.isOnline ? Colors.green : Colors.grey,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      )
+                    ],
                   ),
-                )
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500)),
+                    Text(user.isOnline ? "Online" : user.lastSeen.getLastSeen,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ))
+                  ],
+                ),
               ],
             ),
-          ),
-          const SizedBox(width: 10),
-          Text(name,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-        ],
-      ),
-      actions: [
-        IconButton(
-            onPressed: () {
-              //not available yet
-            },
-            icon: const Icon(Icons.local_phone_outlined, color: Colors.black)),
-        IconButton(
-            onPressed: () {
-              //not available yet
-            },
-            icon: const Icon(Icons.videocam_outlined, color: Colors.black)),
-        IconButton(
-          onPressed: () => {
-            showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(20, 50, 0, 0),
-                items: [
-                  PopupMenuItem(
-                      value: 1,
-                      onTap: () => _showBackgroundDialog(context),
-                      child: const Text("Change Background")),
-                ])
-          },
-          icon: const Icon(Icons.more_vert_outlined, color: Colors.black),
-        ),
-      ],
-    );
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    //not available yet
+                  },
+                  icon: const Icon(Icons.local_phone_outlined,
+                      color: Colors.black)),
+              IconButton(
+                  onPressed: () {
+                    //go to video call
+                    context.read<CallCubit>().makeCall(context,
+                        receiverId: receiverId,
+                        receiverName: name,
+                        receiverPic: profilePicture.isNotEmpty
+                            ? profilePicture
+                            : "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
+                        isGroupChat: isGroupChat);
+                  },
+                  icon:
+                      const Icon(Icons.videocam_outlined, color: Colors.black)),
+              IconButton(
+                onPressed: () => {
+                  showMenu(
+                      context: context,
+                      position: const RelativeRect.fromLTRB(20, 50, 0, 0),
+                      items: [
+                        PopupMenuItem(
+                            value: 1,
+                            onTap: () => _showBackgroundDialog(context),
+                            child: const Text("Change Background")),
+                      ])
+                },
+                icon: const Icon(Icons.more_vert_outlined, color: Colors.black),
+              ),
+            ],
+          );
+        });
   }
 
   void _showBackgroundDialog(BuildContext context) {
@@ -112,6 +159,7 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
+                      saveBackground(colors[index]);
                       Navigator.pop(context);
                     },
                     child: Container(

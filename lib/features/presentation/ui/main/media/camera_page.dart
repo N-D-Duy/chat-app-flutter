@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
 import 'package:chat_app_flutter/core/utils/functions/image_griphy_picker.dart';

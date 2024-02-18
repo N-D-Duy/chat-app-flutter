@@ -5,7 +5,7 @@ enum MessageType {
   video('video'),
   audio('audio'),
   location('location'),
-  contact('contact');
+  file('file');
 
   const MessageType(this.type);
 
@@ -27,8 +27,8 @@ extension ConvertMessage on String {
         return MessageType.audio;
       case 'location':
         return MessageType.location;
-      case 'contact':
-        return MessageType.contact;
+      case 'file':
+        return MessageType.file;
       default:
         return MessageType.text;
     }

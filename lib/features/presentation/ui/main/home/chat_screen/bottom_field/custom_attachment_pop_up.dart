@@ -1,11 +1,19 @@
 import 'dart:io';
 
 import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
+import 'package:chat_app_flutter/core/utils/enum/message_type.dart';
 import 'package:chat_app_flutter/core/utils/functions/image_griphy_picker.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/media/camera_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/media/widget/preview/image_preview_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/media/widget/preview/video_preview_page.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../../bloc/chat/in_chat/in_chat_cubit.dart';
 
 class CustomAttachmentPopUp extends StatelessWidget {
   final String receiverId;
@@ -44,7 +52,9 @@ class CustomAttachmentPopUp extends StatelessWidget {
                   name: "Document",
                   color: Colors.deepPurpleAccent,
                   icon: Icons.insert_drive_file,
-                  onPress: () {},
+                  onPress: () {
+                    _selectDocument(context);
+                  },
                 ),
                 AttachmentCardItem(
                   name: "Camera",
@@ -67,22 +77,53 @@ class CustomAttachmentPopUp extends StatelessWidget {
                   },
                 ),
                 AttachmentCardItem(
-                  name: "Audio",
-                  color: Colors.orange,
-                  icon: Icons.headphones,
-                  onPress: () {},
-                ),
-                AttachmentCardItem(
-                    name: "Contact",
+                    name: "Video",
                     color: Colors.blue,
-                    icon: Icons.person,
-                    onPress: () {})
+                    icon: Icons.play_circle_fill,
+                    onPress: () {
+                      selectVideoFromGallery(context);
+                    }),
+                AttachmentCardItem(
+                    name: "Location",
+                    icon: Icons.map_outlined,
+                    color: Colors.blue,
+                    onPress: () {
+                      _getLocation(context);
+                    })
               ],
             ),
           )
         ];
       },
     );
+  }
+
+  void _selectDocument(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'pdf',
+        'doc',
+        'docx'
+      ], // Chỉ cho phép chọn các loại tệp nhất định
+    );
+
+    if (result != null) {
+      // Lấy đường dẫn của tệp đã chọn
+      String? filePath = result.files.single.path;
+      if (filePath != null) {
+        // Xử lý tệp đã chọn ở đây
+        if(context.mounted){
+          context.read<InChatCubit>().sendFileMessage(
+              file: File(filePath),
+              receiverId: receiverId,
+              messageType: MessageType.file,
+              isGroupChat: isGroupChat);
+        }
+      }
+    } else {
+      // Người dùng không chọn tệp
+    }
   }
 
   // This  function that selects an image from the device's gallery,
@@ -98,7 +139,52 @@ class CustomAttachmentPopUp extends StatelessWidget {
           ));
     }
   }
+
+  void selectVideoFromGallery(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // Xử lý video đã chọn ở đây
+      String videoPath = pickedFile.path;
+      if (videoPath.isNotEmpty) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, VideoPreviewPage.routeName,
+            arguments: VideoPreviewPage(
+              videoFilePath: videoPath,
+              receiverId: receiverId,
+              isGroupChat: isGroupChat,
+            ));
+      }
+    }
+  }
+
+  Future<String> _getLocation(BuildContext context) async {
+    // Lấy vị trí hiện tại của người dùng
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return 'Location permission is denied';
+      }
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    // Tạo URL của Google Maps dựa trên vị trí hiện tại
+    String mapsUrl =
+        'https://www.google.com/maps/search/?api=1&query=${position
+        .latitude},${position.longitude}';
+
+    if(context.mounted){
+      context.read<InChatCubit>().sendTextMessage(
+          text: mapsUrl,
+          receiverId: receiverId,
+          isGroupChat: isGroupChat);
+    }
+    return mapsUrl;
+  }
 }
+
 
 class AttachmentCardItem extends StatelessWidget {
   final String name;
@@ -106,12 +192,11 @@ class AttachmentCardItem extends StatelessWidget {
   final Color color;
   final VoidCallback onPress;
 
-  const AttachmentCardItem(
-      {super.key,
-      required this.name,
-      required this.icon,
-      required this.color,
-      required this.onPress});
+  const AttachmentCardItem({super.key,
+    required this.name,
+    required this.icon,
+    required this.color,
+    required this.onPress});
 
   @override
   Widget build(BuildContext context) {

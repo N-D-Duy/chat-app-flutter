@@ -142,7 +142,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
         CircleAvatar(
           radius: 25,
           backgroundColor: AppColor.primaryColor,
-          child: Image.asset("assets/user_default.png"),
+          child: Image.asset("assets/images/default_avatar.jpg"),
         ),
         Positioned(
           right: -6,

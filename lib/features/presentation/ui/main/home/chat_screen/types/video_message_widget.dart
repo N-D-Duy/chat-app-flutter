@@ -30,6 +30,13 @@ class _VideoMessageWidgetState extends State<VideoMessageWidget> {
         CachedVideoPlayerController.network(widget.messageData.content)
           ..initialize().then((value) {
             _videoPlayerController.setVolume(1);
+            _videoPlayerController.addListener(() {
+              if (_videoPlayerController.value.position ==
+                  _videoPlayerController.value.duration) {
+                // Video đã hoàn thành, quay lại điểm xuất phát
+                _videoPlayerController.seekTo(Duration.zero);
+              }
+            });
           });
   }
 

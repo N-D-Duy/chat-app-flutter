@@ -19,10 +19,10 @@ class ContactsCubit extends Cubit<ContactsState> {
       final contacts = await _useCases().contacts.getAllContacts();
       contacts.fold(
         (error) => emit(GetAllContactsError(message: error.message)),
-        (success) => {
-          emit(GetAllContactsSuccess(contacts: success)),
-          contactsUid = success.map((e) => e.uid).toList(),
-          _contacts.addAll(success),
+        (success) {
+          emit(GetAllContactsSuccess(contacts: success));
+          contactsUid = success.map((e) => e.uid).toList();
+          _contacts.addAll(success);
         },
       );
     } catch (e) {

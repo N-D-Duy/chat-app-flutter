@@ -123,7 +123,7 @@ class InChatCubit extends Cubit<InChatState> {
     final result = await usecases().chat.setMessageSeen(receiverId, messageId);
     result.fold(
       (l) => emit(InChatErrorState(message: l.message)),
-      (r) => emit(MessageReadedSuccess()),
+      (r) => emit(MessageSeenSuccess()),
     );
   }
 

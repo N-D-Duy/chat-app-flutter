@@ -42,7 +42,7 @@ class ReceiverMessageCard extends StatelessWidget {
                 constraints: BoxConstraints(
                     maxWidth: context.width(0.8),
                     minWidth: 120,
-                    maxHeight: 400),
+                    maxHeight: double.infinity),
                 child: Card(
                     elevation: 2,
                     shape: const RoundedRectangleBorder(

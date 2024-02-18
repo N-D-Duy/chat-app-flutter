@@ -28,6 +28,13 @@ class _VideoMessagePreviewState extends State<VideoMessagePreview> {
         CachedVideoPlayerController.network(widget.messageData.content)
           ..initialize().then((value) {
             _videoPlayerController.setVolume(1);
+            _videoPlayerController.addListener(() {
+              if (_videoPlayerController.value.position ==
+                  _videoPlayerController.value.duration) {
+                // Video đã hoàn thành, quay lại điểm xuất phát
+                _videoPlayerController.seekTo(Duration.zero);
+              }
+            });
           });
   }
 
@@ -38,7 +45,7 @@ class _VideoMessagePreviewState extends State<VideoMessagePreview> {
       appBar: AppBarMessagePreview(messageData: widget.messageData),
       body: Center(
         child: AspectRatio(
-          aspectRatio: 9 / 16,
+          aspectRatio: _videoPlayerController.value.aspectRatio,
           child: Stack(
             children: [
               CachedVideoPlayer(_videoPlayerController),
