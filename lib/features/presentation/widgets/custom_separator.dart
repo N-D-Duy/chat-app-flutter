@@ -16,12 +16,15 @@ class CustomSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center( // Căn giữa phân cách
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius), // Bo tròn border
-          color: color, // Màu sắc
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius), // Bo tròn border
+            color: color, // Màu sắc
+          ),
         ),
       ),
     );

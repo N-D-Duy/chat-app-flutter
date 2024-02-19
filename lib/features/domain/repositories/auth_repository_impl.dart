@@ -29,4 +29,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<UserCredential> signUp(String email, String password) {
     return _authService.signUpWithEmail(email, password);
   }
+
+  @override
+  Future<String> getCurrentUserId() {
+    return _authService.getCurrentUserId();
+  }
 }

@@ -36,3 +36,17 @@ class SetUserStatusSuccess extends UserState {}
 class SetUserStatusError extends UserState {}
 
 class UserDeleted extends UserState {}
+
+class UpdateProfileImageSuccess extends UserState {}
+
+class GetProfileSuccess extends UserState {
+  final Profile profile;
+  const GetProfileSuccess({required this.profile});
+
+  @override
+  List<Object?> get props => [profile];
+}
+
+class ProfileLoading extends UserState {}
+
+

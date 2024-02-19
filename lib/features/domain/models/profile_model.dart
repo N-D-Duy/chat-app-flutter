@@ -7,15 +7,15 @@ class Profile {
   String? phone;
   String? address;
   String? birthday;
-  String? avatar;
+  String avatar;
   String? gender;
   Profile({
     required this.uid,
     required this.userName,
+    required this.avatar,
     this.phone,
     this.address,
     this.birthday,
-    this.avatar,
     this.gender,
   });
 
@@ -25,7 +25,7 @@ class Profile {
         phone = null,
         address = null,
         birthday = null,
-        avatar = null,
+        avatar = '',
         gender = null;
 
   Profile copyWith({
@@ -67,7 +67,7 @@ class Profile {
       phone: map['phone'] != null ? map['phone'] as String : null,
       address: map['address'] != null ? map['address'] as String : null,
       birthday: map['birthday'] != null ? map['birthday'] as String : null,
-      avatar: map['avatar'] != null ? map['avatar'] as String : null,
+      avatar: map['avatar'] as String,
       gender: map['gender'] != null ? map['gender'] as String : null,
     );
   }

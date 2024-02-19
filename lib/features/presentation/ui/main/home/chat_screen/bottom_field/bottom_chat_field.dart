@@ -93,7 +93,7 @@ class BottomChatField extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Message',
+                        hintText: 'Type a message',
                         hintStyle: TextStyle(
                           fontSize: 20,
                           color: AppColor.grey,

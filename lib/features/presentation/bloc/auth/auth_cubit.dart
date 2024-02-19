@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final usecase = di<AppUseCases>;
+
   AuthCubit() : super(AuthInitialState()) {
     _initialize();
   }
@@ -39,7 +40,25 @@ class AuthCubit extends Cubit<AuthState> {
             Account(uid: user.uid, email: email, password: hashedPassword));
         usecase()
             .user
-            .insertProfile(Profile(uid: user.uid, userName: userName));
+            .insertProfile(Profile(uid: user.uid, userName: userName, avatar: 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',));
+        UserModel saveUser = UserModel(
+            uid: user.uid,
+            userName: userName,
+            profileImage:
+                'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',
+            lastSeen: DateTime.now(),
+            groupId: [],
+            status: StatusModel(
+                uid: user.uid,
+                username: userName,
+                photoUrl: [],
+                createdAt: DateTime.now(),
+                profilePicture: '',
+                statusId: '',
+                idOnAppUser: [],
+                caption: ''),
+            isOnline: true,);
+        usecase().user.insertUser(saveUser);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -58,24 +77,6 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final userCredential = await usecase().auth.signIn(email, password);
       if (userCredential.user != null) {
-        UserModel user = UserModel(
-            uid: userCredential.user!.uid,
-            userName: userCredential.user!.email!.split('@').first,
-            profileImage: '',
-            lastSeen: DateTime.now(),
-            groupId: [],
-            status: StatusModel(
-                uid: userCredential.user!.uid,
-                username: userCredential.user!.email!.split('@').first,
-                photoUrl: [],
-                createdAt: DateTime.now(),
-                profilePicture: '',
-                statusId: '',
-                idOnAppUser: [],
-                caption: ''),
-            isOnline: true,
-            chats: []);
-        usecase().user.insertUser(user);
         emit(AuthSignInSuccess(user: userCredential.user!));
       }
     } on FirebaseAuthException catch (e) {
@@ -127,5 +128,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<User?> getCurrentUser() async {
     return await usecase().auth.getCurrentUser();
+  }
+
+  Future<String> getCurrentUserId() async {
+    return await usecase().auth.getCurrentUserId();
   }
 }

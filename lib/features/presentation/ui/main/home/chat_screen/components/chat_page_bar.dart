@@ -4,6 +4,8 @@ import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/others/background_chat/background_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app_flutter/features/presentation/widgets/custom_avatar.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../data/datasources/others/change_background_color.dart';
 import '../../../../../bloc/call/call_cubit.dart';
+import '../../../profile_settings/contact_profile_page.dart';
 
 class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
@@ -44,7 +47,6 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
             );
           }
           UserModel user = snapshot.data!;
-          print('user: $user');
           return AppBar(
             backgroundColor: Colors.white,
             elevation: 5,
@@ -55,11 +57,16 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
                   width: 40,
                   child: Stack(
                     children: [
-                      CustomImage(
-                          imageUrl: profilePicture.isEmpty
-                              ? "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
-                              : profilePicture,
-                          radius: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, ContactProfilePage.routeName,
+                              arguments: ContactProfilePage(
+                                  uid: receiverId, name: name, imageUrl: profilePicture));
+                        },
+                        child: CircleAvatar(
+                            backgroundImage: NetworkImage(profilePicture),
+                            radius: 20),
+                      ),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -104,9 +111,7 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
                     context.read<CallCubit>().makeCall(context,
                         receiverId: receiverId,
                         receiverName: name,
-                        receiverPic: profilePicture.isNotEmpty
-                            ? profilePicture
-                            : "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
+                        receiverPic: profilePicture,
                         isGroupChat: isGroupChat);
                   },
                   icon:

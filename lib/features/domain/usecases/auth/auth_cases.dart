@@ -39,4 +39,9 @@ class AuthUseCase implements AuthRepository {
   Future<User?> getCurrentUser() {
     return _repository.getCurrentUser();
   }
+
+  @override
+  Future<String> getCurrentUserId() {
+    return _repository.getCurrentUserId();
+  }
 }

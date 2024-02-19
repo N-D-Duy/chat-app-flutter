@@ -42,7 +42,7 @@ class MessageContactsRemoteDataSourceImpl
         // This new ChatContactModel object is added to a list of ChatContactModel objects
         messages.add(Chat(
             name: profile.userName,
-            profileUrl: profile.avatar ?? '',
+            profileUrl: profile.avatar,
             lastMessage: chatContact.lastMessage,
             lastMessageTime: chatContact.lastMessageTime,
             contactId: chatContact.contactId));

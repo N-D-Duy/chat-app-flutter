@@ -54,6 +54,11 @@ class AuthService {
     return currentUser;
   }
 
+  Future<String> getCurrentUserId() async {
+    final currentUser = _auth.currentUser;
+    return currentUser!.uid;
+  }
+
   Future<void> resetPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

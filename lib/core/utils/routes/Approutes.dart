@@ -3,7 +3,8 @@
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/chat_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/profile_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/contact_profile_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
@@ -81,11 +82,18 @@ class AppRoutes {
                   isGroupChat: arguments.isGroupChat,
                 ));
       case ProfilePage.routeName:
-        // final arguments = settings.arguments as UserModel;
-        // return MaterialPageRoute(
-        //   builder: (context) => ProfilePage(user: arguments),
-        // );
-        return MaterialPageRoute(builder: (context) => const ProfilePage());
+        final arguments = settings.arguments as String;
+        return MaterialPageRoute(builder: (context) => ProfilePage(
+          uid: arguments,
+        ));
+      case ContactProfilePage.routeName:
+        final arguments = settings.arguments as ContactProfilePage;
+        return MaterialPageRoute(
+            builder: (context) => ContactProfilePage(
+                  uid: arguments.uid,
+                  name: arguments.name,
+                  imageUrl: arguments.imageUrl,
+                ));
       case FindContactList.routeName:
         return MaterialPageRoute(builder: (context) => const SearchBarContact());
       default:

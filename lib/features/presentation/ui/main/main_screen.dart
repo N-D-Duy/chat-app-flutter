@@ -1,13 +1,17 @@
 import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/pages/page_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/calls/call_list_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/home/general/home_page.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/profile_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/status/status_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../domain/models/user_model.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routeName = 'main';
@@ -74,7 +78,24 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       case 2:
         return const StatusPage();
       case 3:
-        return const ProfilePage();
+        return FutureBuilder<String>(
+          future: context.read<AuthCubit>().getCurrentUserId(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error.toString()),
+                );
+              } else {
+                return ProfilePage(
+                  uid: snapshot.data!,
+                );
+              }
+            }
+          },
+        );
       default:
         return const HomePages();
     }

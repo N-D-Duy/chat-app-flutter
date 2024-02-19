@@ -22,9 +22,9 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, Profile>> getProfile() async {
+  Future<Either<Failure, Profile>> getProfile(String uid) async {
     try {
-      final result = await _userRemoteDataSource.getProfile();
+      final result = await _userRemoteDataSource.getProfile(uid);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -90,6 +90,16 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, void>> insertUser(UserModel user) async {
     try {
       final result = await _userRemoteDataSource.insertUser(user);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateProfileImage(String path) async {
+    try {
+      final result = await _userRemoteDataSource.updateProfileImage(path);
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

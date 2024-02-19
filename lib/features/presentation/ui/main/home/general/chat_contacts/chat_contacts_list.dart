@@ -23,17 +23,19 @@ class ChatContactList extends StatelessWidget {
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
+                print('chat contact list snapshot.data: ${snapshot.data}');
+                print('count: ${snapshot.data!.length}');
                 var chatContactData = snapshot.data![index];
                 return InkWell(
                     onTap: () => {
-                          Navigator.pushNamed(context, ChatPage.routeName,
-                              arguments: ChatPage(
-                                name: chatContactData.name,
-                                receiverId: chatContactData.contactId,
-                                profilePicture: chatContactData.profileUrl,
-                                isGroupChat: false,
-                              ))
-                        },
+                      Navigator.pushNamed(context, ChatPage.routeName,
+                          arguments: ChatPage(
+                            name: chatContactData.name,
+                            receiverId: chatContactData.contactId,
+                            profilePicture: chatContactData.profileUrl,
+                            isGroupChat: false,
+                          ))
+                    },
                     child: ChatContactsCard(chat: chatContactData));
               },
             );

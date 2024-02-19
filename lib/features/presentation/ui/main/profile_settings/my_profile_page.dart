@@ -1,19 +1,26 @@
+import 'dart:io';
+
+import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
+import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfilePage extends StatefulWidget {
+import '../../../../../core/utils/functions/image_griphy_picker.dart';
+
+class ProfilePage extends StatelessWidget {
   static const routeName = 'profile';
-  const ProfilePage({Key? key}) : super(key: key);
+  final String uid;
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
+  const ProfilePage({
+    Key? key,
+    required this.uid,
+  }) : super(key: key);
 
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    print(uid);
     return Scaffold(
       body: Stack(children: [
         const DecoratedBox(
@@ -35,31 +42,46 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.bold)),
               ],
             )),
-        const Positioned(
-          top: 80,
-          left: 0,
-          right: 0,
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: NetworkImage(
-                    'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'),
-              ),
-              SizedBox(height: 10),
-              Text('John Doe',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
-              Text(
-                'I am a John Doe, I a...',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
-            ],
-          ),
-        ),
+        Positioned(
+            top: 80,
+            left: 0,
+            right: 0,
+            child: StreamBuilder<UserModel>(
+                stream: context.read<UserCubit>().getUserById(uid),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    if (snapshot.data != null) {
+                      var userData = snapshot.data!;
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              //change avatar
+                              _changeAvatar(context);
+                            },
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(userData.profileImage),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(userData.userName,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 10),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: Text('No data found'),
+                      );
+                    }
+                  }
+                })),
         Center(
             child: Container(
           margin: const EdgeInsets.only(top: 320),
@@ -137,5 +159,20 @@ class _ProfilePageState extends State<ProfilePage> {
         ))
       ]),
     );
+  }
+
+  Future<void> _changeAvatar(BuildContext context) async {
+    //open and pick image from gallery
+    File? image = await pickImageFromGallery(context);
+    if (image != null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Uploading...'),
+          ),
+        );
+        context.read<UserCubit>().updateProfileImage(image.path);
+      }
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:chat_app_flutter/features/domain/models/account_model.dart';
 import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
 import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/data/repositories/user_repository.dart';
+
 // ignore: implementation_imports
 import 'package:either_dart/src/either.dart';
 
@@ -18,17 +19,17 @@ class UserUseCase implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, Profile>> getProfile() {
-    return _repository.getProfile();
+  Future<Either<Failure, Profile>> getProfile(String uid) {
+    if (uid.isEmpty) {
+      throw DatabaseException('getProfile: uid is empty');
+    } else {
+      return _repository.getProfile(uid);
+    }
   }
 
   @override
   Stream<UserModel> getUserById(String id) {
-    if (id.isEmpty) {
-      throw DatabaseException('getUserById: id is empty');
-    } else {
-      return _repository.getUserById(id);
-    }
+    return _repository.getUserById(id);
   }
 
   @override
@@ -78,6 +79,15 @@ class UserUseCase implements UserRepository {
       throw DatabaseException('insertUser: uid is empty');
     } else {
       return _repository.insertUser(user);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateProfileImage(String path) {
+    if (path.isEmpty) {
+      throw DatabaseException('updateProfileImage: path is empty');
+    } else {
+      return _repository.updateProfileImage(path);
     }
   }
 }

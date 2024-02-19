@@ -13,7 +13,6 @@ class UserModel {
   final List<String> groupId;
   final StatusModel status;
   final bool isOnline;
-  List<String> chats;
   UserModel({
     required this.uid,
     required this.userName,
@@ -22,7 +21,6 @@ class UserModel {
     required this.groupId,
     required this.status,
     required this.isOnline,
-    required this.chats,
   });
 
   UserModel copyWith({
@@ -43,7 +41,6 @@ class UserModel {
       groupId: groupId ?? this.groupId,
       status: status ?? this.status,
       isOnline: isOnline ?? this.isOnline,
-      chats: chats ?? this.chats,
     );
   }
 
@@ -56,7 +53,6 @@ class UserModel {
       'groupId': groupId,
       'status': status.toMap(),
       'isOnline': isOnline,
-      'chats': chats,
     };
   }
 
@@ -70,7 +66,6 @@ class UserModel {
           (map['groupId'] as List<dynamic>).map((e) => e as String).toList(),
       status: StatusModel.fromMap(map['status'] as Map<String, dynamic>),
       isOnline: map['isOnline'] as bool,
-      chats: (map['chats'] as List<dynamic>).map((e) => e as String).toList(),
     );
   }
 
@@ -81,7 +76,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, status: $status, isOnline: $isOnline, chats: $chats)';
+    return 'UserModel(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, status: $status, isOnline: $isOnline)';
   }
 
   @override
@@ -94,8 +89,7 @@ class UserModel {
         other.lastSeen == lastSeen &&
         listEquals(other.groupId, groupId) &&
         other.status == status &&
-        other.isOnline == isOnline &&
-        listEquals(other.chats, chats);
+        other.isOnline == isOnline;
   }
 
   @override
@@ -106,7 +100,6 @@ class UserModel {
         lastSeen.hashCode ^
         groupId.hashCode ^
         status.hashCode ^
-        isOnline.hashCode ^
-        chats.hashCode;
+        isOnline.hashCode;
   }
 }

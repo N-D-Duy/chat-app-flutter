@@ -26,18 +26,6 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
 
-
-  /* Future<void> createChat(String senderId, String receiverId) async {
-    emit(ChatLoadingState());
-
-    try {
-      await usecase().chat.createChat(senderId, receiverId);
-      emit(ChatCreatedSuccess());
-    } catch (error) {
-      emit(ChatError(message: error.toString()));
-    }
-  } */
-
   /* Future<void> deleteChat(String senderId, String receiverId) async {
     emit(ChatLoadingState());
 

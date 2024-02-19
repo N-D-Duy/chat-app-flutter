@@ -8,17 +8,6 @@ abstract class ChatState extends Equatable {
 
 class ChatInitialState extends ChatState {}
 
-class ChatLoadingState extends ChatState {}
-
-//Chat
-class GetAllChatContactsSuccess<T> extends ChatState {
-  final List<Chat> data;
-  const GetAllChatContactsSuccess({required this.data});
-
-  @override
-  List<Object?> get props => [data];
-}
-
 class ChatError extends ChatState {
   final String message;
   const ChatError({required this.message});
@@ -27,14 +16,5 @@ class ChatError extends ChatState {
   List<Object?> get props => [message];
 }
 
-class GetNumberOfUnreadMessagesSuccess<T> extends ChatState {
-  final int data;
-  const GetNumberOfUnreadMessagesSuccess({required this.data});
-
-  @override
-  List<Object?> get props => [data];
-}
-
-class ChatCreatedSuccess extends ChatState {}
 
 class ChatDeletedSuccess extends ChatState {}

@@ -105,7 +105,7 @@ class TextMessageWidget extends StatelessWidget {
   }
 
   void _handleLinkTap(BuildContext context) {
-    // Bạn có thể thực hiện một số xử lý khác ở đây, nếu cần
+
   }
 }
 

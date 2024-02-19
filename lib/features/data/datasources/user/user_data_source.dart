@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:chat_app_flutter/core/utils/constants/firebase_ref.dart';
 import 'package:chat_app_flutter/features/data/datasources/firebase_service.dart';
 import 'package:chat_app_flutter/features/domain/models/account_model.dart';
 import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
 import 'package:chat_app_flutter/features/domain/models/user_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class UserRemoteDataSource {
   Future<UserModel?> getCurrentUserData();
@@ -10,14 +13,16 @@ abstract class UserRemoteDataSource {
   Future<void> setUserStateStatus(bool isOnline);
   Future<void> updateProfile(Profile newProfile);
   Future<void> updateAccount(String newPassword);
-  Future<Profile> getProfile();
+  Future<Profile> getProfile(String uid);
   Future<void> insertProfile(Profile profile);
   Future<void> insertAccount(Account account);
   Future<void> insertUser(UserModel user);
+  Future<void> updateProfileImage(String path);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final firestore = FirebaseService.firestore;
+  final fireStorage = FirebaseService.storage;
   final auth = FirebaseService.auth;
   @override
   Future<UserModel?> getCurrentUserData() async {
@@ -76,10 +81,10 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Profile> getProfile() async {
+  Future<Profile> getProfile(String uid) async {
     return await firestore
         .collection(FirebaseRef.PROFILE_COLLECTION)
-        .doc(auth.currentUser!.uid)
+        .doc(uid)
         .get()
         .then((value) => Profile.fromMap(value.data()!));
   }
@@ -106,5 +111,53 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         .collection(FirebaseRef.USER_COLLECTION)
         .doc(user.uid)
         .set(user.toMap());
+  }
+
+  @override
+  Future<void> updateProfileImage(String path) async {
+    String uid = auth.currentUser!.uid;
+    //The method first deletes the previous profile picture by checking if the user has a profile picture and calling the _deleteFileFromFirebase method
+    // to remove the file from Firebase storage.
+    var userData = await firestore.collection('users').doc(uid).get();
+    UserModel user = UserModel.fromMap(userData.data()!);
+    if(user.profileImage.isNotEmpty && user.profileImage != 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'){
+      await _deleteFileFromFirebase(user.profileImage);
+    }
+    //Then it uploads the new profile picture using the _storeFileToFirebase method and stores the download URL of the new picture in the Firestore database.
+    String photoUrl = await _storeFileToFirebase(
+      'profilePicture/$uid',
+      File(path),
+    );
+    await firestore.collection(FirebaseRef.USER_COLLECTION).doc(auth.currentUser!.uid).update({
+      'profileImage': photoUrl,
+    });
+    await firestore.collection(FirebaseRef.PROFILE_COLLECTION).doc(auth.currentUser!.uid).update({
+      'avatar': photoUrl,
+    });
+    updateProfileImageInChat(uid, photoUrl);
+  }
+
+  Future<void> updateProfileImageInChat(String uid, String photoUrl) async {
+    var chats = await firestore.collection(FirebaseRef.USER_COLLECTION).doc(uid).collection('chats').get();
+    for(var chat in chats.docs){
+      //update the profileUrl field of chat documents which chat.id matched uid
+      await firestore.collection(FirebaseRef.USER_COLLECTION).doc(uid).collection('chats').doc(chat.id).update({
+        'profileUrl': photoUrl,
+      });
+    }
+  }
+
+  //This is method deletes a file from Firebase Storage.
+  Future<void> _deleteFileFromFirebase(String path)async{
+    return await fireStorage.refFromURL(path).delete();
+  }
+
+  //This is method uploads a file to Firebase Storage and returns the download URL of the uploaded file.
+  Future<String> _storeFileToFirebase(String path, File file) async {
+    UploadTask uploadTask = fireStorage.ref().child(path).putFile(file);
+    TaskSnapshot snapshot = await uploadTask;
+    //return the download URL of the uploaded file
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }
