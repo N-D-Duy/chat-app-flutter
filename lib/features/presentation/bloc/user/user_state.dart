@@ -19,7 +19,7 @@ class UserError extends UserState {
   List<Object?> get props => [message];
 }
 
-class GetUserByIdSuccess<T> extends UserState {
+class GetUserByIdSuccess extends UserState {
   final UserModel data;
   const GetUserByIdSuccess({required this.data});
 

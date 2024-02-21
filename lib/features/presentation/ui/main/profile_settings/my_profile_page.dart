@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:chat_app_flutter/core/utils/routes/Approutes.dart';
 import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/ui/login/login.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/options/account/account_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -97,7 +99,7 @@ class ProfilePage extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () => {
-                  Navigator.pushNamed(context, '/account-details'),
+                  Navigator.pushNamed(context, AccountDetails.routeName, arguments: uid),
                 },
                 leading: const Icon(Icons.person),
                 title: const Text('Account'),

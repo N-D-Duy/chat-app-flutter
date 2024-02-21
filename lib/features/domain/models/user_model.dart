@@ -11,7 +11,6 @@ class UserModel {
   String profileImage;
   final DateTime lastSeen;
   final List<String> groupId;
-  final StatusModel status;
   final bool isOnline;
   UserModel({
     required this.uid,
@@ -19,7 +18,6 @@ class UserModel {
     required this.profileImage,
     required this.lastSeen,
     required this.groupId,
-    required this.status,
     required this.isOnline,
   });
 
@@ -39,7 +37,6 @@ class UserModel {
       profileImage: profileImage ?? this.profileImage,
       lastSeen: lastSeen ?? this.lastSeen,
       groupId: groupId ?? this.groupId,
-      status: status ?? this.status,
       isOnline: isOnline ?? this.isOnline,
     );
   }
@@ -51,7 +48,6 @@ class UserModel {
       'profileImage': profileImage,
       'lastSeen': lastSeen.millisecondsSinceEpoch,
       'groupId': groupId,
-      'status': status.toMap(),
       'isOnline': isOnline,
     };
   }
@@ -64,7 +60,6 @@ class UserModel {
       lastSeen: DateTime.fromMillisecondsSinceEpoch(map['lastSeen'] as int),
       groupId:
           (map['groupId'] as List<dynamic>).map((e) => e as String).toList(),
-      status: StatusModel.fromMap(map['status'] as Map<String, dynamic>),
       isOnline: map['isOnline'] as bool,
     );
   }
@@ -76,7 +71,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, status: $status, isOnline: $isOnline)';
+    return 'UserModel(uid: $uid, userName: $userName, profileImage: $profileImage, lastSeen: $lastSeen, groupId: $groupId, isOnline: $isOnline)';
   }
 
   @override
@@ -88,7 +83,6 @@ class UserModel {
         other.profileImage == profileImage &&
         other.lastSeen == lastSeen &&
         listEquals(other.groupId, groupId) &&
-        other.status == status &&
         other.isOnline == isOnline;
   }
 
@@ -99,7 +93,6 @@ class UserModel {
         profileImage.hashCode ^
         lastSeen.hashCode ^
         groupId.hashCode ^
-        status.hashCode ^
         isOnline.hashCode;
   }
 }

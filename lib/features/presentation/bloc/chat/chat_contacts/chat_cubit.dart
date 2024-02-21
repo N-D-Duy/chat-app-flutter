@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app_flutter/core/di/injection.dart';
 import 'package:chat_app_flutter/features/domain/usecases/app_use_cases.dart';
 
-import '../../../../domain/models/message_model.dart';
 import '../../../../domain/models/message_reply_model.dart';
 
 part 'chat_state.dart';

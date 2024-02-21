@@ -5,6 +5,8 @@ import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/contact_profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/options/account/account_detail.dart';
+import 'package:chat_app_flutter/features/presentation/ui/main/status/components/status_privacy_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +14,12 @@ import '../../../features/domain/models/message_model.dart';
 import '../../../features/presentation/ui/main/calls/calling/calling_page.dart';
 import '../../../features/presentation/ui/main/home/chat_screen/previews/image_message_preview.dart';
 import '../../../features/presentation/ui/main/home/chat_screen/previews/video_message_preview.dart';
-import '../../../features/presentation/ui/main/home/find_select_contact/find_contact_list.dart';
-import '../../../features/presentation/ui/main/home/find_select_contact/search_bar_contact.dart';
+import '../../../features/presentation/ui/main/home/general/find_select_contact/find_contact_list.dart';
+import '../../../features/presentation/ui/main/home/general/find_select_contact/search_bar_contact.dart';
 import '../../../features/presentation/ui/main/media/camera_page.dart';
 import '../../../features/presentation/ui/main/media/widget/preview/image_preview_page.dart';
 import '../../../features/presentation/ui/main/media/widget/preview/video_preview_page.dart';
+import '../../../features/presentation/ui/main/status/status_page_detail.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -96,6 +99,19 @@ class AppRoutes {
                 ));
       case FindContactList.routeName:
         return MaterialPageRoute(builder: (context) => const SearchBarContact());
+      case StatusPrivacyPage.routeName:
+        return MaterialPageRoute(builder: (context) => const StatusPrivacyPage());
+      case StatusDetailPage.routeName:
+        final arguments = settings.arguments as StatusDetailPage;
+        return MaterialPageRoute(
+          builder: (context) => StatusDetailPage(
+            status: arguments.status,
+            isMyStatus: arguments.isMyStatus,
+          ),
+        );
+       case AccountDetails.routeName:
+         final arguments = settings.arguments as String;
+        return MaterialPageRoute(builder: (context) => AccountDetails(uid: arguments));
       default:
         return MaterialPageRoute(builder: (context) => const SplashPage());
     }

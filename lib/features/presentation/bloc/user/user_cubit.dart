@@ -5,6 +5,7 @@ import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/models/account_model.dart';
 import '../../../domain/models/profile_model.dart';
 
 part 'user_state.dart';
@@ -14,6 +15,8 @@ class UserCubit extends Cubit<UserState> {
   UserCubit() : super(UserInitialState());
 
   UserModel? userModel;
+  Profile? profile;
+  Account? account;
   Future<void> getCurrentUser() async {
     final result = await usecase()
         .user
@@ -48,11 +51,11 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> getProfile(String uid) async{
-    emit(ProfileLoading());
     final result = await usecase().user.getProfile(uid);
     result.fold(
         (l)=> emit(UserError(message: l.message)),
         (r){
+          profile = r;
           emit(GetProfileSuccess(profile: r));
         }
     );

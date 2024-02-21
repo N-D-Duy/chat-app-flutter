@@ -5,7 +5,8 @@ import 'package:chat_app_flutter/features/presentation/ui/main/home/general/cont
 import 'package:chat_app_flutter/features/presentation/widgets/custom_separator.dart';
 import 'package:flutter/material.dart';
 
-import '../find_select_contact/search_bar_contact.dart';
+import 'find_select_contact/search_bar_contact.dart';
+
 
 class HomePages extends StatelessWidget {
   static const String routeName = 'home';

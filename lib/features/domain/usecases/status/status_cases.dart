@@ -22,7 +22,6 @@ class StatusUseCases implements StatusRepository {
     if (username.isEmpty ||
         profilePicture.isEmpty ||
         statusImage.path.isEmpty ||
-        uidOnAppContact.isEmpty ||
         caption.isEmpty) {
       throw DatabaseException('uploadStatus: some parameter is empty');
     } else {

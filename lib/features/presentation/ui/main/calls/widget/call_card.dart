@@ -1,7 +1,6 @@
 import 'package:chat_app_flutter/core/utils/constants/app_color.dart';
 import 'package:chat_app_flutter/core/utils/extensions/time_extension.dart';
 import 'package:chat_app_flutter/features/domain/models/call_model.dart';
-import 'package:chat_app_flutter/features/presentation/widgets/custom_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +16,8 @@ class CallCard extends StatelessWidget {
     var currentIdUser = context.read<UserCubit>().userModel!;
     return ListTile(
       onTap: () {},
-      leading: CustomImage(
-        imageUrl: callData.receiverPic,
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(callData.receiverPic),
         radius: 30,
       ),
       title: Text(

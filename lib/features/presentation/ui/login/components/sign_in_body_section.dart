@@ -2,7 +2,7 @@
 
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_state.dart';
-import 'package:chat_app_flutter/features/presentation/providers/snackbar.dart';
+import 'package:chat_app_flutter/features/presentation/widgets/snackbar.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/main_screen.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/button.dart';
 import 'package:chat_app_flutter/features/presentation/widgets/icon_login.dart';

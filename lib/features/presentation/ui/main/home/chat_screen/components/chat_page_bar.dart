@@ -1,14 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app_flutter/core/utils/extensions/time_extension.dart';
 import 'package:chat_app_flutter/features/domain/models/user_model.dart';
-import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/bloc/others/background_chat/background_cubit.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/user/user_cubit.dart';
-import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chat_app_flutter/features/presentation/widgets/custom_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../data/datasources/others/change_background_color.dart';
@@ -93,6 +88,7 @@ class ChatPageBar extends StatelessWidget implements PreferredSizeWidget {
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
+                          overflow: TextOverflow.ellipsis,
                         ))
                   ],
                 ),

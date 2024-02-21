@@ -32,64 +32,73 @@ class StatusRemoteDataSourceImpl extends StatusRemoteDataSource {
   @override
   Future<void> uploadStatus(
       {required String username,
-      required String profilePicture,
-      required File statusImage,
-      required List<String> uidOnAppContact,
-      required String caption}) async {
+        required String profilePicture,
+        required File statusImage,
+        required List<String> uidOnAppContact,
+        required String caption}) async {
     try {
-      // It first generates a unique status ID using the uuid package and gets the user ID from the Firebase authentication instance.
+      List<String> statusImageUrls = [];
+      List<String> statusCaptions = [];
+      List<DateTime> statusCreatedAt = [];
       var statusId = const Uuid().v1();
       String uid = auth.currentUser!.uid;
 
-      //The method first generates a unique status ID using the Uuid library, and then gets the user ID of the currently logged-in user
       var imageUrl = await _storeFileToFirebase(
         'status/$statusId/$uid',
         statusImage,
       );
 
-      List<String> statusImageUrls = [];
-      //queries Firestore to see if the user has already uploaded a status.
       var statusesSnapshot = await firestore
           .collection("status")
           .where("uid", isEqualTo: auth.currentUser!.uid)
           .get();
 
-      //If the user has previously uploaded a status, the method retrieves the existing status data from Firestore, adds the new photo URL to the photoUrl
-      // field, and updates the Firestore document with current time uploaded.
+      //if the user has already uploaded a status, the method updates the existing status with the new image URL, caption and create time.
       if (statusesSnapshot.docs.isNotEmpty) {
         StatusModel status =
-            StatusModel.fromMap(statusesSnapshot.docs[0].data());
+        StatusModel.fromMap(statusesSnapshot.docs[0].data());
+        print('status: $status');
+
         statusImageUrls = status.photoUrl;
         statusImageUrls.add(imageUrl);
+
+        statusCaptions = status.caption;
+        statusCaptions.add(caption);
+
+        statusCreatedAt = status.createdAt;
+        statusCreatedAt.add(DateTime.now());
         await firestore
             .collection("status")
             .doc(statusesSnapshot.docs[0].id)
             .update({
+          'caption': statusCaptions,
           'photoUrl': statusImageUrls,
-          "createdAt": DateTime.now().millisecondsSinceEpoch
+          'createdAt': statusCreatedAt.map((e) => e.millisecondsSinceEpoch).toList(),
         });
         return;
-      }
-      //If the user has not uploaded a status before, the method creates a new StatusModel object and adds it to Firestore.
-      else {
+      } else {
         statusImageUrls = [imageUrl];
+        statusCaptions = [caption];
+        statusCreatedAt = [DateTime.now()];
       }
 
       StatusModel status = StatusModel(
           uid: uid,
           username: username,
           photoUrl: statusImageUrls,
-          createdAt: DateTime.now(),
+          createdAt: statusCreatedAt,
           profilePicture: profilePicture,
           statusId: statusId,
           idOnAppUser: uidOnAppContact,
-          caption: caption);
+          caption: statusCaptions);
 
       await firestore.collection("status").doc(statusId).set(status.toMap());
     } catch (e) {
       throw ServerException(e.toString());
     }
   }
+
+
 
   //This is method uploads a file to Firebase Storage and returns the download URL of the uploaded file.
   Future<String> _storeFileToFirebase(String path, File file) async {
@@ -109,33 +118,36 @@ class StatusRemoteDataSourceImpl extends StatusRemoteDataSource {
   Stream<List<StatusModel>> getStatus() async* {
     try {
       final List<StatusModel> statusData = [];
-      //queries documents based on the createdAt field value, selecting only documents that were created within the past 24 hours.
-      // The query sorts the documents in descending order based on the createdAt field value.
-      final Query<Map<String, dynamic>> query = firestore
-          .collection('status')
-          .where('createdAt',
-              isGreaterThan: DateTime.now()
-                  .subtract(const Duration(hours: 24))
-                  .millisecondsSinceEpoch)
-          .orderBy('createdAt', descending: true);
 
-      print("query $query");
-      //The method then listens to changes to the query using snapshots() and retrieves any new or updated documents matching the query criteria.
-      await for (QuerySnapshot<Map<String, dynamic>> statusesSnapshot
-          in query.snapshots()) {
-        print("statusesSnapshot $statusesSnapshot");
-        //For each snapshot, it creates a new list of StatusModel objects by iterating through each document in the snapshot and converting its data to a StatusModel object.
+      // Tính thời gian trước 24 giờ
+      DateTime twentyFourHoursAgo = DateTime.now().subtract(const Duration(hours: 24));
+      // Truy vấn các tài liệu trong 24 giờ gần đây
+      Query<Map<String, dynamic>> query = firestore
+          .collection("status");
+
+      // Lắng nghe thay đổi trong truy vấn
+      await for (QuerySnapshot<Map<String, dynamic>> statusesSnapshot in query.snapshots()) {
+        // Xử lý dữ liệu mới
         for (var doc in statusesSnapshot.docs) {
-          print("status $doc");
-          final StatusModel tempStatus = StatusModel.fromMap(doc.data());
-          statusData.add(tempStatus);
+          final List<int> createdAtList = (doc.data()['createdAt'] as List<dynamic>).cast<int>();
+          final int lastCreatedAt = createdAtList.last;
+          final DateTime lastCreatedAtDateTime = DateTime.fromMillisecondsSinceEpoch(lastCreatedAt);
+
+          // Kiểm tra nếu giá trị cuối cùng của createdAt nhỏ hơn 24 giờ trước
+          if (lastCreatedAtDateTime.isAfter(twentyFourHoursAgo)) {
+            final StatusModel tempStatus = StatusModel.fromMap(doc.data());
+            statusData.add(tempStatus);
+          }
         }
-        //Finally, it yields the list of StatusModel objects as a stream.
+
+        // Yield dữ liệu mới
         yield statusData.toList();
+        print('statusData: $statusData'); // []
       }
     } catch (e) {
       if (kDebugMode) print(e.toString());
       throw ServerException(e.toString());
     }
   }
+
 }

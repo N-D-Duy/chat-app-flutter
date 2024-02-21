@@ -134,6 +134,16 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await firestore.collection(FirebaseRef.PROFILE_COLLECTION).doc(auth.currentUser!.uid).update({
       'avatar': photoUrl,
     });
+
+    //update the profileUrl in status collection
+    await firestore.collection("status").where('uid', isEqualTo: uid).get().then((value) {
+      for(var doc in value.docs){
+        firestore.collection("status").doc(doc.id).update({
+          'profilePicture': photoUrl,
+        });
+      }
+    });
+
     updateProfileImageInChat(uid, photoUrl);
   }
 

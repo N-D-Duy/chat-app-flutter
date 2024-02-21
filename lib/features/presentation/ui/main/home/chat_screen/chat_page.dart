@@ -6,7 +6,6 @@ import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../data/datasources/others/change_background_color.dart';
 import '../../../../bloc/others/background_chat/background_cubit.dart';
 
 class ChatPage extends StatefulWidget {

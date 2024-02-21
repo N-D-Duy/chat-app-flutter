@@ -6,12 +6,10 @@ import 'package:chat_app_flutter/features/presentation/ui/main/calls/call_list_p
 import 'package:chat_app_flutter/features/presentation/ui/main/home/general/home_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/profile_settings/my_profile_page.dart';
 import 'package:chat_app_flutter/features/presentation/ui/main/status/status_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/models/user_model.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routeName = 'main';

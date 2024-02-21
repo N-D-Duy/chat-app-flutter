@@ -1,5 +1,6 @@
-import 'package:chat_app_flutter/features/presentation/ui/main/home/find_select_contact/find_contact_list.dart';
+
 import 'package:flutter/material.dart';
+import 'find_contact_list.dart';
 
 class SearchBarContact extends StatelessWidget {
   const SearchBarContact({super.key});

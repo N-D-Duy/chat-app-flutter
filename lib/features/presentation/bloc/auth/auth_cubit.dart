@@ -1,8 +1,7 @@
 import 'package:chat_app_flutter/core/di/injection.dart';
-import 'package:chat_app_flutter/core/utils/hash_password.dart';
+import 'package:chat_app_flutter/core/utils/functions/hash_password.dart';
 import 'package:chat_app_flutter/features/domain/models/account_model.dart';
 import 'package:chat_app_flutter/features/domain/models/profile_model.dart';
-import 'package:chat_app_flutter/features/domain/models/status_model.dart';
 import 'package:chat_app_flutter/features/domain/models/user_model.dart';
 import 'package:chat_app_flutter/features/domain/usecases/app_use_cases.dart';
 import 'package:chat_app_flutter/features/presentation/bloc/auth/auth_state.dart';
@@ -40,7 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
             Account(uid: user.uid, email: email, password: hashedPassword));
         usecase()
             .user
-            .insertProfile(Profile(uid: user.uid, userName: userName, avatar: 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',));
+            .insertProfile(Profile(uid: user.uid, userName: userName, email: email, avatar: 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',));
         UserModel saveUser = UserModel(
             uid: user.uid,
             userName: userName,
@@ -48,15 +47,6 @@ class AuthCubit extends Cubit<AuthState> {
                 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png',
             lastSeen: DateTime.now(),
             groupId: [],
-            status: StatusModel(
-                uid: user.uid,
-                username: userName,
-                photoUrl: [],
-                createdAt: DateTime.now(),
-                profilePicture: '',
-                statusId: '',
-                idOnAppUser: [],
-                caption: ''),
             isOnline: true,);
         usecase().user.insertUser(saveUser);
       }

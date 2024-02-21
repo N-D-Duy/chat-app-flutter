@@ -7,12 +7,12 @@ class StatusModel {
   final String uid;
   final String username;
   final List<String> photoUrl;
-  final DateTime createdAt;
+  final List<DateTime> createdAt;
   final String profilePicture;
   final String statusId;
   final List<String>
       idOnAppUser; // id user who can see our status, which mean already install app
-  final String caption;
+  final List<String> caption;
 
   const StatusModel({
     required this.uid,
@@ -30,7 +30,7 @@ class StatusModel {
       'uid': uid,
       'username': username,
       'photoUrl': photoUrl,
-      'createdAt': createdAt.millisecondsSinceEpoch,
+      'createdAt': createdAt.map((e) => e.millisecondsSinceEpoch).toList(),
       'profilePicture': profilePicture,
       'statusId': statusId,
       'idOnAppUser': idOnAppUser,
@@ -44,13 +44,15 @@ class StatusModel {
       username: map['username'] as String,
       photoUrl:
           (map['photoUrl'] as List<dynamic>).map((e) => e as String).toList(),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      createdAt: (map['createdAt'] as List<dynamic>)
+          .map((e) => DateTime.fromMillisecondsSinceEpoch(e as int))
+          .toList(),
       profilePicture: map['profilePicture'] as String,
       statusId: map['statusId'] as String,
       idOnAppUser: (map['idOnAppUser'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      caption: map['caption'] as String,
+      caption: (map['caption'] as List<dynamic>).map((e) => e as String).toList(),
     );
   }
 
@@ -58,11 +60,11 @@ class StatusModel {
     String? uid,
     String? username,
     List<String>? photoUrl,
-    DateTime? createdAt,
+    List<DateTime>? createdAt,
     String? profilePicture,
     String? statusId,
     //? idOnAppUser,
-    String? caption,
+    List<String>? caption,
   }) {
     return StatusModel(
       uid: uid ?? this.uid,

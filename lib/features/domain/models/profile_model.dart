@@ -4,6 +4,7 @@ import 'dart:convert';
 class Profile {
   String uid;
   String userName;
+  String email;
   String? phone;
   String? address;
   String? birthday;
@@ -12,6 +13,7 @@ class Profile {
   Profile({
     required this.uid,
     required this.userName,
+    required this.email,
     required this.avatar,
     this.phone,
     this.address,
@@ -22,6 +24,7 @@ class Profile {
   Profile.defaultConstructor()
       : uid = '',
         userName = '',
+        email = '',
         phone = null,
         address = null,
         birthday = null,
@@ -31,6 +34,7 @@ class Profile {
   Profile copyWith({
     String? uid,
     String? userName,
+    String? email,
     String? phone,
     String? address,
     String? birthday,
@@ -40,6 +44,7 @@ class Profile {
     return Profile(
       uid: uid ?? this.uid,
       userName: userName ?? this.userName,
+      email: email ?? this.email,
       phone: phone ?? this.phone,
       address: address ?? this.address,
       birthday: birthday ?? this.birthday,
@@ -52,6 +57,7 @@ class Profile {
     return <String, dynamic>{
       'uid': uid,
       'userName': userName,
+      'email': email,
       'phone': phone,
       'address': address,
       'birthday': birthday,
@@ -64,6 +70,7 @@ class Profile {
     return Profile(
       uid: map['uid'] as String,
       userName: map['userName'] as String,
+      email: map['email'] as String,
       phone: map['phone'] != null ? map['phone'] as String : null,
       address: map['address'] != null ? map['address'] as String : null,
       birthday: map['birthday'] != null ? map['birthday'] as String : null,
@@ -79,7 +86,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(uid: $uid, userName: $userName, phone: $phone, address: $address, birthday: $birthday, avatar: $avatar, gender: $gender)';
+    return 'Profile(uid: $uid, userName: $userName, email: $email, phone: $phone, address: $address, birthday: $birthday, avatar: $avatar, gender: $gender)';
   }
 
   @override
@@ -88,6 +95,7 @@ class Profile {
 
     return other.uid == uid &&
         other.userName == userName &&
+        other.email == email &&
         other.phone == phone &&
         other.address == address &&
         other.birthday == birthday &&
