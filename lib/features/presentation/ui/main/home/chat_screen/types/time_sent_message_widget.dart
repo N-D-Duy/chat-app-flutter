@@ -28,9 +28,9 @@ class TimeSentMessageWidget extends StatelessWidget {
           const SizedBox(width: 5),
           if (isSender)
             Icon(
-              messageData.isRead ? Icons.done_all : Icons.check,
+              messageData.isSeen ? Icons.check_circle : Icons.check_circle_outline,
               size: 20,
-              color: messageData.isRead ? AppColor.grey : AppColor.primaryColor,
+              color: messageData.isSeen ? AppColor.grey : AppColor.primaryColor,
             ),
         ],
       ),

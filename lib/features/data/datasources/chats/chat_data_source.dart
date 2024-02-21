@@ -244,7 +244,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
       messageType: messageType,
       timeSent: timeSent,
       messageId: messageId,
-      isRead: false,
+      isSeen: false,
       repliedMessage: messageReply == null ? '' : messageReply.message,
       senderName: senderUsername,
       repliedTo: messageReply == null
@@ -332,7 +332,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
           contactMessage = '🎙️ Audio';
           break;
         case MessageType.gif:
-          contactMessage = 'Gif';
+          contactMessage = '🎬 Gif';
           break;
         case MessageType.file:
           contactMessage = '📁 File';

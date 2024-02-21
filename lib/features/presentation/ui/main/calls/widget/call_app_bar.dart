@@ -15,7 +15,7 @@ class CallAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         "Calls",
-        style: context.titleLarge?.copyWith(color: AppColor.grey),
+        style: context.titleLarge?.copyWith(color: AppColor.black),
       ),
       actions: [
         PopUp(

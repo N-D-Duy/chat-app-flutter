@@ -34,7 +34,8 @@ class ChatContactList extends StatelessWidget {
                             receiverId: chatContactData.contactId,
                             profilePicture: chatContactData.profileUrl,
                             isGroupChat: false,
-                          ))
+                          )),
+                      //update unread message to 0
                     },
                     child: ChatContactsCard(chat: chatContactData));
               },

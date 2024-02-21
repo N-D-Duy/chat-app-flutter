@@ -51,8 +51,11 @@ class _MessagesListState extends State<MessagesList> {
         }
         //this code is used to automatically scroll to the bottom of a scrollable widget, after the widget has finished rendering its content.
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          messageScrollController
-              .jumpTo(messageScrollController.position.maxScrollExtent);
+          messageScrollController.animateTo(
+            messageScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
         });
 
         return ListView.builder(
@@ -67,7 +70,7 @@ class _MessagesListState extends State<MessagesList> {
 
             //set chat message seen
             // if message not seen and receiver not equal the update seen to true because we already in listview or open the chat
-            if (!messageData.isRead &&
+            if (!messageData.isSeen &&
                 widget.receiverId != messageData.receiverId) {
               context
                   .read<InChatCubit>()

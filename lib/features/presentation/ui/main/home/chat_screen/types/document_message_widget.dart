@@ -1,11 +1,13 @@
 
+import 'package:chat_app_flutter/features/presentation/ui/main/home/chat_screen/types/time_sent_message_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/utils/constants/app_color.dart';
 import '../../../../../../../core/utils/functions/download.dart';
 import '../../../../../../domain/models/message_model.dart';
 
-class DocumentMessageWidget extends StatefulWidget {
+class DocumentMessageWidget extends StatelessWidget {
   final Message messageData;
   final bool isSender;
   const DocumentMessageWidget({
@@ -15,31 +17,37 @@ class DocumentMessageWidget extends StatefulWidget {
   }): super(key: key);
 
   @override
-  State<DocumentMessageWidget> createState() => _DocumentMessageWidgetState();
-}
-
-class _DocumentMessageWidgetState extends State<DocumentMessageWidget> {
-  @override
   Widget build(BuildContext context) {
-    String fileName = widget.messageData.content.split('=').last;
+    String fileName = messageData.content.split('=').last;
     String shortFileName = fileName.length > 15 ? "${fileName.substring(0, 15)}..." : fileName;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        leading: const Icon(Icons.insert_drive_file), // Biểu tượng tài liệu
-        title: Text(shortFileName), // Tên tài liệu
-        trailing: const Icon(Icons.file_download), // Biểu tượng tải xuống
-        onTap: () {
-          // Xử lý khi người dùng nhấn vào tài liệu
-          // Ví dụ: Mở tài liệu, tải xuống, hoặc hiển thị thông báo
-          _handleDocumentTap(widget.messageData.content);
+    return Wrap(
+        crossAxisAlignment: WrapCrossAlignment.end,
+        alignment: WrapAlignment.end,
+      children: [Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListTile(
+          leading: const Icon(Icons.insert_drive_file), // Biểu tượng tài liệu
+          title: Text(shortFileName), // Tên tài liệu
+          trailing: const Icon(Icons.file_download), // Biểu tượng tải xuống
+          onTap: () {
+            // Xử lý khi người dùng nhấn vào tài liệu
+            // Ví dụ: Mở tài liệu, tải xuống, hoặc hiển thị thông báo
+            _handleDocumentTap(messageData.content, context);
 
-        },
+          },
+        ),
       ),
+
+        TimeSentMessageWidget(
+          isSender: isSender,
+          messageData: messageData,
+          colors: isSender ? AppColor.primaryColor : AppColor.grey,
+        ),
+      ]
     );
   }
 
-  Future<void> _handleDocumentTap(String documentUrl) async {
+  Future<void> _handleDocumentTap(String documentUrl, BuildContext context) async {
     //download document
     String? path = await pickSavePath(context);
     if (path != null) {
@@ -61,13 +69,12 @@ class _DocumentMessageWidgetState extends State<DocumentMessageWidget> {
       return null;
     }
   }*/
-
   Future<String?> pickSavePath(BuildContext context) async {
     try {
       // Hiển thị picker để người dùng chọn đường dẫn
       String? result = await FilePicker.platform.getDirectoryPath();
       if (result != null) {
-        return '$result/${widget.messageData.content.split('=').last}';
+        return '$result/${messageData.content.split('=').last}';
       } else {
         throw Exception('Không có đường dẫn được chọn.');
       }

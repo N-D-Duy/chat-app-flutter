@@ -29,7 +29,7 @@ class TextMessageWidget extends StatelessWidget {
         alignment: WrapAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: RichText(
               text: _buildTextSpan(context),
             ),

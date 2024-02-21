@@ -10,7 +10,7 @@ class Message {
   final String senderName;
   final String receiverId;
   final DateTime timeSent;
-  final bool isRead;
+  final bool isSeen;
   final MessageType messageType;
   //reply message
   final MessageType repliedMessageType;
@@ -23,7 +23,7 @@ class Message {
     required this.senderName,
     required this.receiverId,
     required this.timeSent,
-    required this.isRead,
+    required this.isSeen,
     required this.messageType,
     required this.repliedMessageType,
     required this.repliedMessage,
@@ -50,7 +50,7 @@ class Message {
       senderName: senderName ?? this.senderName,
       receiverId: receiverId ?? this.receiverId,
       timeSent: timeSent ?? this.timeSent,
-      isRead: isRead ?? this.isRead,
+      isSeen: isRead ?? this.isSeen,
       messageType: messageType ?? this.messageType,
       repliedMessageType: replyMessageType ?? repliedMessageType,
       repliedMessage: replyMessage ?? repliedMessage,
@@ -66,7 +66,7 @@ class Message {
       'senderName': senderName,
       'receiverId': receiverId,
       'timeSent': timeSent.millisecondsSinceEpoch,
-      'isRead': isRead,
+      'isSeen': isSeen,
       'messageType': messageType.type,
       'replyMessageType': repliedMessageType.type,
       'replyMessage': repliedMessage,
@@ -82,7 +82,7 @@ class Message {
       senderName: map['senderName'] as String,
       receiverId: map['receiverId'] as String,
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent'] as int),
-      isRead: map['isRead'] as bool,
+      isSeen: map['isSeen'] as bool,
       messageType: (map['messageType'] as String).toEnum(),
       repliedMessageType: (map['replyMessageType'] as String).toEnum(),
       repliedMessage: map['replyMessage'] as String,
@@ -97,7 +97,7 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, receiverId: $receiverId, timeSent: $timeSent, isRead: $isRead, messageType: $messageType, replyMessageType: $repliedMessageType, replyMessage: $repliedMessage, replyTo: $repliedTo)';
+    return 'Message(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, receiverId: $receiverId, timeSent: $timeSent, isRead: $isSeen, messageType: $messageType, replyMessageType: $repliedMessageType, replyMessage: $repliedMessage, replyTo: $repliedTo)';
   }
 
   @override
@@ -110,7 +110,7 @@ class Message {
         other.senderName == senderName &&
         other.receiverId == receiverId &&
         other.timeSent == timeSent &&
-        other.isRead == isRead &&
+        other.isSeen == isSeen &&
         other.messageType == messageType &&
         other.repliedMessageType == repliedMessageType &&
         other.repliedMessage == repliedMessage &&
@@ -125,7 +125,7 @@ class Message {
         senderName.hashCode ^
         receiverId.hashCode ^
         timeSent.hashCode ^
-        isRead.hashCode ^
+        isSeen.hashCode ^
         messageType.hashCode ^
         repliedMessageType.hashCode ^
         repliedMessage.hashCode ^

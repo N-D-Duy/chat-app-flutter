@@ -61,7 +61,7 @@ class MessageContactsRemoteDataSourceImpl
         .doc(senderId)
         .collection('messages')
         .where('senderId', isEqualTo: senderId)
-        .where('isRead', isEqualTo: false)
+        .where('isSeen', isEqualTo: false)
         .snapshots()
         .map((event) => event.docs.length);
   }

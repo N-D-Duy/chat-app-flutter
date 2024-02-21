@@ -132,9 +132,12 @@ class ProfilePage extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              BlocProvider.of<AuthCubit>(context).signOut();
-                              Navigator.pushReplacementNamed(
-                                  context, Login.routeName);
+                              // Đóng hộp thoại khi ấn nút "Yes"
+                              Navigator.of(context).pop();
+                              //loding until reach the login page
+                              context.read<AuthCubit>().signOut();
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, Login.routeName, (route) => false);
                             },
                             child: const Text('Yes',
                                 style: TextStyle(color: Colors.red)),
