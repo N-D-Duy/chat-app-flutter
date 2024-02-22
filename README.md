@@ -11,7 +11,7 @@ a simple flutter chat app using firebase services and more!
 
 - chat text
 - send file, image, video, your location, voice.....
-- calling (in maintenance)
+- calling (under maintenance)
 
 ## Hướng Dẫn Cài Đặt
 
