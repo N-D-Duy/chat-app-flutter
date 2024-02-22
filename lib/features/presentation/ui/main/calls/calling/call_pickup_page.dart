@@ -20,6 +20,7 @@ class CallPickupPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           CallModel call = snapshot.data!;
+          print('call receiving: $call');
 
           // we receive incoming call
           if (!call.hasDialled) {
@@ -37,8 +38,8 @@ class CallPickupPage extends StatelessWidget {
                           .copyWith(color: AppColor.blue, fontSize: 30),
                     ),
                     const SizedBox(height: 40),
-                    CustomImage(
-                      imageUrl: call.callerPic,
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(call.callerPic),
                       radius: 60,
                     ),
                     const SizedBox(height: 50),

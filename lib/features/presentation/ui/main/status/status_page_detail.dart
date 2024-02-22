@@ -61,7 +61,6 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                     Navigator.pop(context);
                   },
                   onStoryShow: (s) {
-                    print('index: ${storyItems.indexOf(s)}');
                     int index = storyItems.indexOf(s);
                     if (index != currentIndex) {
                       currentIndex = index;

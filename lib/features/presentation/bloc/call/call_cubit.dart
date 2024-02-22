@@ -34,6 +34,7 @@ class CallCubit extends Cubit<CallState> {
   }
 
   Future<void> endCall({required String callerId, required String receiverId}) {
+    emit(CallEnded());
     return usecase().call.endCall(callerId: callerId, receiverId: receiverId);
   }
 }

@@ -149,5 +149,4 @@ class StatusRemoteDataSourceImpl extends StatusRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
-
 }

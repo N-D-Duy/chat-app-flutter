@@ -7,6 +7,7 @@ abstract class CallState extends Equatable {
 }
 
 class CallInitial extends CallState {}
+class CallEnded extends CallState {}
 
 class CallError extends CallState {
   final String message;
