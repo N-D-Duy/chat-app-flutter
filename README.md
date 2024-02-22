@@ -7,6 +7,12 @@ a simple flutter chat app using firebase services and more!
 
 ![General](https://github.com/N-D-Duy/chat-app-flutter/assets/106760291/d17952db-78ff-499e-8b51-39a340ebf1e5)
 
+## Tính Năng Cơ Bản
+
+- chat text
+- send file, image, video, your location, voice.....
+- calling (in maintenance)
+
 ## Hướng Dẫn Cài Đặt
 
 1. Clone repo này: `https://github.com/N-D-Duy/chat_app_flutter.git`
