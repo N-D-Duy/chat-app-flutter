@@ -21,6 +21,7 @@ import '../../../features/presentation/ui/main/media/widget/preview/image_previe
 import '../../../features/presentation/ui/main/media/widget/preview/video_preview_page.dart';
 import '../../../features/presentation/ui/main/status/status_page_detail.dart';
 
+//define the routes (provide the route name and the widget to be displayed, called by the route name)
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -36,8 +37,7 @@ class AppRoutes {
           builder: (context) => CallingPage(
               channelId: arguments.channelId,
               call: arguments.call,
-              isGroupChat: arguments.isGroupChat
-          ),
+              isGroupChat: arguments.isGroupChat),
         );
       case ImageMessagePreview.routeName:
         final arguments = settings.arguments as Message;
@@ -53,28 +53,28 @@ class AppRoutes {
         final arguments = settings.arguments as CameraPage;
         return MaterialPageRoute(
             builder: (context) => CameraPage(
-              receiverId: arguments.receiverId,
-              userData: arguments.userData,
-              isGroupChat: arguments.isGroupChat,
-            ));
+                  receiverId: arguments.receiverId,
+                  userData: arguments.userData,
+                  isGroupChat: arguments.isGroupChat,
+                ));
       case ImagePreviewPage.routeName:
         final arguments = settings.arguments as ImagePreviewPage;
         return MaterialPageRoute(
             builder: (context) => ImagePreviewPage(
-              imageFilePath: arguments.imageFilePath,
-              receiverId: arguments.receiverId,
-              userData: arguments.userData,
-              isGroupChat: arguments.isGroupChat,
-            ));
+                  imageFilePath: arguments.imageFilePath,
+                  receiverId: arguments.receiverId,
+                  userData: arguments.userData,
+                  isGroupChat: arguments.isGroupChat,
+                ));
       case VideoPreviewPage.routeName:
         final arguments = settings.arguments as VideoPreviewPage;
         return MaterialPageRoute(
             builder: (context) => VideoPreviewPage(
-              receiverId: arguments.receiverId,
-              videoFilePath: arguments.videoFilePath,
-              userData: arguments.userData,
-              isGroupChat: arguments.isGroupChat,
-            ));
+                  receiverId: arguments.receiverId,
+                  videoFilePath: arguments.videoFilePath,
+                  userData: arguments.userData,
+                  isGroupChat: arguments.isGroupChat,
+                ));
       case ChatPage.routeName:
         final arguments = settings.arguments as ChatPage;
         return MaterialPageRoute(
@@ -86,9 +86,10 @@ class AppRoutes {
                 ));
       case ProfilePage.routeName:
         final arguments = settings.arguments as String;
-        return MaterialPageRoute(builder: (context) => ProfilePage(
-          uid: arguments,
-        ));
+        return MaterialPageRoute(
+            builder: (context) => ProfilePage(
+                  uid: arguments,
+                ));
       case ContactProfilePage.routeName:
         final arguments = settings.arguments as ContactProfilePage;
         return MaterialPageRoute(
@@ -98,9 +99,11 @@ class AppRoutes {
                   imageUrl: arguments.imageUrl,
                 ));
       case FindContactList.routeName:
-        return MaterialPageRoute(builder: (context) => const SearchBarContact());
+        return MaterialPageRoute(
+            builder: (context) => const SearchBarContact());
       case StatusPrivacyPage.routeName:
-        return MaterialPageRoute(builder: (context) => const StatusPrivacyPage());
+        return MaterialPageRoute(
+            builder: (context) => const StatusPrivacyPage());
       case StatusDetailPage.routeName:
         final arguments = settings.arguments as StatusDetailPage;
         return MaterialPageRoute(
@@ -109,9 +112,10 @@ class AppRoutes {
             isMyStatus: arguments.isMyStatus,
           ),
         );
-       case AccountDetails.routeName:
-         final arguments = settings.arguments as String;
-        return MaterialPageRoute(builder: (context) => AccountDetails(uid: arguments));
+      case AccountDetails.routeName:
+        final arguments = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (context) => AccountDetails(uid: arguments));
       default:
         return MaterialPageRoute(builder: (context) => const SplashPage());
     }
